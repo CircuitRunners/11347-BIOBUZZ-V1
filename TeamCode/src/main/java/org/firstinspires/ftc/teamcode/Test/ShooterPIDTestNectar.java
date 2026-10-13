@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOps.test;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
