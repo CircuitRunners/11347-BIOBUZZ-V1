@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Configurable
 @TeleOp(name="ShooterPIDTest - NECTAR")
-public class ShooterPIDTestNectar extends OpMode {
+public class ShooterPIDTuner extends OpMode {
     private DcMotorEx shooter;
 
     // Dashboard-tunable constants
