@@ -9,7 +9,7 @@ public class Outtake {
     }
 
     public void setBlockerPositions(double positionL, double positionR) {
-        robot.servo_blockerL.setPosition(positionL);
-        robot.servo_blockerR.setPosition(positionR);
+        robot.servoBlockerL.setPosition(positionL);
+        robot.servoBLockerR.setPosition(positionR);
     }
 }

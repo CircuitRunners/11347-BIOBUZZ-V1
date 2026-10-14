@@ -5,12 +5,11 @@
 //
 //import org.firstinspires.ftc.teamcode.Config.Config;
 //import org.firstinspires.ftc.teamcode.Config.Robot;
+//
 //import org.firstinspires.ftc.teamcode.Subsystems.Drive;
+//import org.firstinspires.ftc.teamcode.Subsystems.ShooterLeft;
+//import org.firstinspires.ftc.teamcode.Subsystems.ShooterRight;
 //import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
-//import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-//import org.firstinspires.ftc.teamcode.FieldFence;
-//import org.firstinspires.ftc.teamcode.Localizer;
-//import org.firstinspires.ftc.teamcode.ObstacleAvoidance;
 //import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 //
 //@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "BIOBUZZ TeleOp", group = "Competition")
@@ -20,10 +19,7 @@
 //    private final Robot robot = new Robot();
 //    private Drive drive;
 //    private Transfer transfer;
-//    private Shooter shooter;
-//    private Localizer localizer;
-//    private final FieldFence fence = new FieldFence();
-//    private ObstacleAvoidance avoidance;
+//    private ShooterLeft shooterLeft;
 //
 //    private Preset currentPreset = Preset.HOME;
 //    private boolean lastStart, lastA, lastB, lastX, lastY, lastDpadUp, lastDpadDown;
@@ -33,7 +29,6 @@
 //    public void init() {
 //        robot.init(hardwareMap);
 //        drive = new Drive(robot);
-//        transfer1 = new Intake(robot);
 //        transfer = new Transfer(robot);
 //        shooter = new Shooter(robot);
 //        localizer = new Localizer(hardwareMap);
@@ -49,41 +44,21 @@
 //    @Override
 //    public void start() {
 //        robot.resetHeading();
-//        transfer1.setHomePosition();
-//        shooter.setPower(0);
-//    }
-//
-//    private void reseedPose() {
-//        localizer.resetPose(Config.TELEOP_START_X_IN, Config.TELEOP_START_Y_IN,
-//                Math.toRadians(Config.TELEOP_START_HEADING_DEG));
 //    }
 //
 //    @Override
 //    public void loop() {
 //        robot.clearBulkCache();
-//        localizer.update();
-//        avoidance.update();
 //
 //        if (gamepad1.start && !lastStart) robot.resetHeading();
 //        lastStart = gamepad1.start;
 //
-//
-//        if (gamepad1.back && !lastBack1) fence.toggle();
-//        if (gamepad1.x && !lastX1) avoidance.toggle();
-//        if (gamepad1.y && !lastY1) reseedPose();
-//        lastBack1 = gamepad1.back;
-//        lastX1 = gamepad1.x;
-//        lastY1 = gamepad1.y;
-//
 //        double strafe = -gamepad1.left_stick_x;
 //        double forward = -gamepad1.left_stick_y;
 //        double turn = -gamepad1.right_stick_x;
-//        boolean robotCentric = gamepad1.right_bumper;
-//        double scale = gamepad1.left_bumper ? Config.SLOW_DRIVE_POWER / Config.MAX_DRIVE_POWER : 1.0;
-//        boolean override = gamepad1.left_trigger > 0.5;
 //
 //
-//        double[] cmd = drive.toRobotFrame(strafe, forward, robotCentric);
+//        drive.drive(strafe, forward, turn);
 //
 //
 //        Pose pose = localizer.getPose();

@@ -11,9 +11,9 @@ public class FlowerIntake {
     }
 
     public void setFlowerDown() {
-        robot.setServoPositions(Config.flowerDown);
+        robot.servoFlower.setPosition(Config.flowerDown);
     }
     public void setFlowerUp() {
-        robot.setServoPositions(Config.flowerUp);
+        robot.servoFlower.setPosition(Config.flowerUp);
     }
 }

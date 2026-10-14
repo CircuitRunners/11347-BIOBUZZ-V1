@@ -5,24 +5,39 @@ public class Config {
     //Hardware Map
     public static final String FL = "fl", FR = "fr", BL = "bl", BR = "br";
     public static final String shooterL = "sl", shooterR = "sr"; //shooter left, shooter right
-    public static final String servo_rampL = "rl", servo_rampR = "rr"; //ramp Left, ramp Right
-    public static final String servo_hoodL = "hl", servo_hoodR = "hr"; //hood Left, hood Right
-    public static final String servo_blockerL = "bl", servo_blockerR = "br"; //blocker left, blocker right
-    public static final String servo_flower = "flower";
-    public static final String IMU = "imu", COLOR = "color";
+    public static final String servoRampL = "rl", servoRampR = "rr"; //ramp Left, ramp Right
+    public static final String servoHoodL = "hl", servoHoodR = "hr"; //hood Left, hood Right
+    public static final String servoBlockerL = "blockl", servoBlockerR = "blockr"; //blocker left, blocker right
+    public static final String servoFlower = "flower";
+    //public static final String IMU = "imu", COLOR = "color";
 
     //Motor reverses
     public static final boolean REVERSE_FL = true, REVERSE_FR = false;
     public static final boolean REVERSE_BL = true, REVERSE_BR = false;
     public static final boolean REVERSE_TRANSFER_LEFT = true, REVERSE_TRANSFER_RIGHT = false;
     public static final boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true;
-    public static final boolean REVERSE_AXON_1 = false, REVERSE_AXON_2 = false;
-    public static final boolean REVERSE_AXON_3 = false, REVERSE_AXON_4 = false;
-    public static final boolean REVERSE_SERVO_25_1 = false, REVERSE_SERVO_25_2 = false;
-    public static final boolean REVERSE_SERVO_25_3 = false;
 
     //Servo positions
     public static final double flowerDown = 0.0, flowerUp = 0.0;
+
+    //Shooter Constants
+    public static double TARGET_RPM_LEFT = 0.0;
+    public static double TARGET_RPM_RIGHT = 0.0;
+    public static double GEAR_RATIO = 1.0;
+    public static double TICKS_PER_REV = 28;
+    public static double THRESHOLD = 200;
+
+    public static double kP_LEFT = 30.0;
+    public static double kI_LEFT = 0.0;
+    public static double kD_LEFT = 1.0;
+    public static double kF_LEFT = 18.0;
+
+    public static double kP_RIGHT = 30.0;
+    public static double kI_RIGHT = 0.0;
+    public static double kD_RIGHT = 1.0;
+    public static double kF_RIGHT = 18.5;
+
+    //----------------------
     public static final double OUTTAKE_MAX_POWER = 1.0;
 
     public static final double AUTO_PARK_X_IN = 24, AUTO_PARK_Y_IN = 36, AUTO_PARK_HEADING_DEG = 0;

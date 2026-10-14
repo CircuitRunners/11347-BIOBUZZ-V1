@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Config.Robot;
+
 /**
  * Start with kF auto, then raise/lower kF until the motor reaches near target at steady state (low error).
  * Add small kP to tighten response (too high = oscillation).
@@ -17,42 +19,43 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
  */
 
 @Configurable
-@TeleOp(name="ShooterPIDTest - NECTAR")
+@TeleOp(name="ShooterPIDTuner")
 public class ShooterPIDTuner extends OpMode {
     private DcMotorEx shooter;
 
     // Dashboard-tunable constants
-    public static double TARGET_RPM = 0.0; // 4000
-    public static double MOTOR_RPM = 6000.0; // 1410
+    public static double TARGET_RPM = 0.0;
     public static double GEAR_RATIO = 1.0;
     public static double TICKS_PER_REV = 28.0;
 
 
     // PIDF (velocity)
-    public static double kP = 35.0; //15.0
+    public static double kP = 0.0;
     public static double kI = 0.0;
-    public static double kD = 10.0;
-    public static double kF = 13.0; //13.7
+    public static double kD = 0.0;
+    public static double kF = 0.0;
 
     public double kfValue;
 
     // Toggles shooter on and off in dashboard
     public static boolean runShooter = false;
+    public static boolean isLeft = true;
+
+    private final Robot robot = new Robot();;
 
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
-
     @Override
     public void init() {
+        robot.init(hardwareMap);
 
-        shooter = hardwareMap.get(DcMotorEx.class, "nectarShooter");
-
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        if (isLeft) {
+            shooter = robot.shooterLeft;
+        }
+        else {
+            shooter = robot.shooterRight;
+        }
 
         applyPIDF();
 
@@ -78,6 +81,7 @@ public class ShooterPIDTuner extends OpMode {
 
     @Override
     public void loop() {
+        robot.clearBulkCache();
         /** Live PIDF updates via dashboard */
         applyPIDF();
 
