@@ -38,6 +38,9 @@ public class Robot {
         backLeft = required(hardwareMap, DcMotorEx.class, Config.BL);
         backRight = required(hardwareMap, DcMotorEx.class, Config.BR);
 
+        transferLeft = required(hardwareMap, DcMotorEx.class, Config.transferL);
+        transferRight = required(hardwareMap, DcMotorEx.class, Config.transferR);
+
         shooterLeft = required(hardwareMap, DcMotorEx.class, Config.shooterL);
         shooterRight = required(hardwareMap, DcMotorEx.class, Config.shooterR);
 
@@ -70,19 +73,16 @@ public class Robot {
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        //transferLeft.setDirection(Config.REVERSE_TRANSFER_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
-        //transferRight.setDirection(Config.REVERSE_TRANSFER_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        transferLeft.setDirection(Config.REVERSE_TRANSFER_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        transferRight.setDirection(Config.REVERSE_TRANSFER_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
 
         configureMotor(frontLeft, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         configureMotor(frontRight, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         configureMotor(backLeft, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         configureMotor(backRight, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        //configureMotor(shooterLeft, DcMotor.RunMode.RUN_USING_ENCODER);
-        //configureMotor(shooterRight, DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //configureMotor(transferLeft, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //configureMotor(transferRight, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        configureMotor(transferLeft, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        configureMotor(transferRight, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 //        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
 //                RevHubOrientationOnRobot.LogoFacingDirection.UP,

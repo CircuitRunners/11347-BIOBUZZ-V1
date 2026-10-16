@@ -4,6 +4,7 @@ public class Config {
 
     //Hardware Map
     public static final String FL = "fl", FR = "fr", BL = "bl", BR = "br";
+    public static final String transferL = "tl", transferR = "tr";
     public static final String shooterL = "sl", shooterR = "sr"; //shooter left, shooter right
     public static final String servoRampL = "rl", servoRampR = "rr"; //ramp Left, ramp Right
     public static final String servoHoodL = "hl", servoHoodR = "hr"; //hood Left, hood Right
@@ -15,14 +16,28 @@ public class Config {
     public static final boolean REVERSE_FL = true, REVERSE_FR = false;
     public static final boolean REVERSE_BL = true, REVERSE_BR = false;
     public static final boolean REVERSE_TRANSFER_LEFT = true, REVERSE_TRANSFER_RIGHT = false;
-    public static final boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true;
+    public static final boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true; //Finalized, DO NOT TOUCH
 
-    //Servo positions
+    //Flower Intake
     public static final double flowerDown = 0.0, flowerUp = 0.0;
 
+    //Outtake
+    public static final double blockerOpenL = 0.5, blockerOpenR = 0.5;
+    public static final double blockerClosedL = 0.5, blockerClosedR = 0.5;
+    public static final double rampPollenL = 0.5, rampPollenR = 0.5;
+    public static final double rampNectarL = 0.5, rampNectarR = 0.5;
+    public static final double hoodPollenL = 0.5, hoodPollenR = 0.5;
+    public static final double hoodNectarL = 0.5, hoodNectarR = 0.5;
+
+    public static double hoodMinAngle = 0.5, hoodMaxAngle = 0.8;
+    public static double ANGLE_INCREASE_RATE = 0.01;
+
+    //Transfer Constants
+    public static double intakePower = 0.9, spitPower = -0.3;
+
     //Shooter Constants
-    public static double TARGET_RPM_LEFT = 0.0;
-    public static double TARGET_RPM_RIGHT = 0.0;
+    public static double POLLEN_RPM = 2900;
+    public static double NECTAR_RPM = 3000;
     public static double GEAR_RATIO = 1.0;
     public static double TICKS_PER_REV = 28;
     public static double THRESHOLD = 200;
@@ -38,7 +53,6 @@ public class Config {
     public static double kF_RIGHT = 18.5;
 
     //----------------------
-    public static final double OUTTAKE_MAX_POWER = 1.0;
 
     public static final double AUTO_PARK_X_IN = 24, AUTO_PARK_Y_IN = 36, AUTO_PARK_HEADING_DEG = 0;
 

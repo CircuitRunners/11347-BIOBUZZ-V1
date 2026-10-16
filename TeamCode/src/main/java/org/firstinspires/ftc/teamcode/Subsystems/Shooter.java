@@ -5,24 +5,43 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 import org.firstinspires.ftc.teamcode.Config.Config;
 
-public class ShooterLeft { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 3000 RPM nectar
-    private final Robot robot = new Robot();
+public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 3000 RPM nectar
+    private final Robot robot;
     private DcMotorEx shooter;
+    private double TARGET_RPM = 0.0;
+    private double kP;
+    private double kI;
+    private double kD;
+    private double kF;
+    public Shooter(Robot robot, DcMotorEx shooter, double kP, double kI, double kD, double kF) {
+        this.robot = robot;
+        this.shooter = shooter;
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.kF = kF;
+    }
+    public void pollenRPM() {
+        setTargetRPM(Config.POLLEN_RPM);
+    }
+
+    public void nectarRPM() {
+        setTargetRPM(Config.NECTAR_RPM);
+    }
 
     public void setTargetRPM(double targetRPM) {
-        Config.TARGET_RPM_LEFT = targetRPM;
+        TARGET_RPM = targetRPM;
     }
 
     public double getTargetRPM() {
-        return Config.TARGET_RPM_LEFT;
+        return TARGET_RPM;
     }
 
-
     public void applyPIDF() {
-        shooter.setVelocityPIDFCoefficients(Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT, Config.kF_LEFT);}
+        shooter.setVelocityPIDFCoefficients(kP, kI, kD, kF);}
 
     public void update() {
-        double targetMotorRPM = Config.TARGET_RPM_LEFT / Config.GEAR_RATIO;
+        double targetMotorRPM = TARGET_RPM / Config.GEAR_RATIO;
         double targetTicksPerSec = (targetMotorRPM * Config.TICKS_PER_REV) / 60.0;
         shooter.setVelocity(targetTicksPerSec);
     }

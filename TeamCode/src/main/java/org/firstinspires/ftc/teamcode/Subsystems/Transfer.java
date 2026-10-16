@@ -12,15 +12,15 @@ public class Transfer {
 
     public void setTransferPower(double power) {
         robot.transferLeft.setPower(power);
-        robot.transferRight.setPower(-power);
+        robot.transferRight.setPower(power);
     }
 
     public void transferOn() {
-        setTransferPower(0.9);
+        setTransferPower(Config.intakePower);
     }
 
-    public void transferOff() {
-        setTransferPower(-0.3);
+    public void transferSpit() {
+        setTransferPower(Config.spitPower);
     }
 
     public void transferStop() {
