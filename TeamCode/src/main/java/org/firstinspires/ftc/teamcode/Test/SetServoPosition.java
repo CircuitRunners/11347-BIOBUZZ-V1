@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name="Set Servo Position")
 public class SetServoPosition extends OpMode {
     private Servo testServo;
-    public static double position = 0.5;
+    public static double position = 0.0;
     public static double INCREMENT = 0.001; // Amount to increment servo position
     public static double MAX_POSITION = 100;  //right = 0.32
     private final double MIN_POSITION = 0.0;
@@ -27,7 +27,7 @@ public class SetServoPosition extends OpMode {
         // Initialize the servo (name it "testServo" in your hardware configuration)
         testServo = hardwareMap.get(Servo.class, "testServo");
         //testServo.setDirection(Servo.Direction.REVERSE);
-
+        position = 0.5;
         testServo.setPosition(position);
 
         telemetry.addData("ServoTester", "Initialized");

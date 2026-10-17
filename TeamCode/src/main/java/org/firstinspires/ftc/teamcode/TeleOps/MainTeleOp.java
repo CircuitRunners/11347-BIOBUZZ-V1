@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 @Configurable
 @TeleOp(name = "BIOBUZZ MainTeleOp", group = "Competition")
 public class MainTeleOp extends LinearOpMode {
@@ -30,6 +32,8 @@ public class MainTeleOp extends LinearOpMode {
     private boolean flowerDown = false;
     public static boolean isPollenL = true; //temp
     public static boolean isPollenR = true; //temp
+    private boolean shooterOnL = false;
+    private boolean shooterOnR = false;
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
@@ -44,6 +48,10 @@ public class MainTeleOp extends LinearOpMode {
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
+        outtakeLeft.setHoodPosition(0.5);
+        outtakeRight.setHoodPosition(0.5);
+
+
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         telemetryM.addLine("INITIALIZED");
         telemetryM.update(telemetry);
@@ -56,8 +64,22 @@ public class MainTeleOp extends LinearOpMode {
 
             GamePadControls();
 
-
-
+            //Telemetry
+            telemetryM.addLine("TEST");
+            telemetryM.addLine("==============================");
+            telemetryM.addLine("Outtake Telemetry");
+            telemetryM.addData("Servo Ramp Position LEFT", outtakeLeft.getRampPosition());
+            telemetryM.addData("Servo Ramp Position RIGHT", outtakeRight.getRampPosition());
+            telemetryM.addData("Servo Hood Position LEFT", outtakeLeft.getHoodPosition());
+            telemetryM.addData("Servo Hood Position RIGHT", outtakeRight.getHoodPosition());
+            telemetryM.addData("Blocker Position LEFT", outtakeLeft.getBlockerPosition());
+            telemetryM.addData("Blocker Position RIGHT", outtakeRight.getBlockerPosition());
+            telemetryM.addLine("==============================");
+            telemetryM.addLine("Shooter Telemetry");
+            telemetryM.addData("Shooter Target RPM LEFT", shooterLeft.getTargetRPM());
+            telemetryM.addData("Shooter Target RPM RIGHT", shooterRight.getTargetRPM());
+            telemetryM.addData("Shooter Velocity LEFT", shooterLeft.getShooterVelocity());
+            telemetryM.addData("Shooter Velocity RIGHT", shooterRight.getShooterVelocity());
             telemetryM.update(telemetry);
         }
     }
@@ -73,9 +95,6 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         if (gamepad1.left_bumper) {
-            //left bumper: turn on and off shooter, move left blocker and turn on transfer/intake motors (hold to do stuff)
-            shooterLeft.setTargetRPM(Config.POLLEN_RPM);
-            sleep(1000);
             outtakeLeft.setBlockerPosition(Config.blockerOpenL);
             //need to determine Shooting Algorithm - Jonathan. Code below is temporary.
             if (isPollenL) {
@@ -88,16 +107,12 @@ public class MainTeleOp extends LinearOpMode {
             }
         }
         else {
-            shooterLeft.setTargetRPM(0);
             outtakeLeft.setBlockerPosition(Config.blockerClosedL);
             outtakeLeft.setRampPosition(0.5); //temp
             outtakeLeft.setHoodPosition(0.5); //temp
         }
 
         if (gamepad1.right_bumper) {
-            shooterRight.setTargetRPM(Config.POLLEN_RPM);
-
-            sleep(1000);
             outtakeRight.setBlockerPosition(Config.blockerOpenR);
             //need to determine Shooting Algorithm - Jonathan. Code below is temporary
             if (isPollenR) {
@@ -110,34 +125,33 @@ public class MainTeleOp extends LinearOpMode {
             }
         }
         else {
-            shooterRight.setTargetRPM(0);
             outtakeRight.setBlockerPosition(Config.blockerClosedR);
-            outtakeRight.setRampPosition(0.5); //temp
-            outtakeRight.setHoodPosition(0.5); //temp
+//            outtakeRight.setRampPosition(0.5); //temp
+//            outtakeRight.setHoodPosition(0.5); //temp
         }
 
         if (gamepad2.left_stick_y > 0.1) {
             double servo_pos = outtakeLeft.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngle) {
+            if (servo_pos < Config.hoodMaxAngleL) {
                 outtakeLeft.setHoodPosition(servo_pos + Config.ANGLE_INCREASE_RATE);
             }
         }
         else if (gamepad2.left_stick_y < -0.1) {
             double servo_pos = outtakeLeft.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngle) {
+            if (servo_pos > Config.hoodMinAngleL) {
                 outtakeLeft.setHoodPosition(servo_pos - Config.ANGLE_INCREASE_RATE);
             }
         }
 
         if (gamepad2.right_stick_y > 0.1) {
             double servo_pos = outtakeRight.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngle) {
+            if (servo_pos < Config.hoodMaxAngleR) {
                 outtakeRight.setHoodPosition(servo_pos + Config.ANGLE_INCREASE_RATE);
             }
         }
         else if (gamepad2.right_stick_y < 0.1) {
             double servo_pos = outtakeRight.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngle) {
+            if (servo_pos > Config.hoodMinAngleR) {
                 outtakeRight.setHoodPosition(servo_pos - Config.ANGLE_INCREASE_RATE);
             }
         }
@@ -152,6 +166,27 @@ public class MainTeleOp extends LinearOpMode {
             }
             else {
                 flowerIntake.setFlowerDown();
+            }
+        }
+        if (gamepad1.dpadLeftWasPressed()) {
+            if (!shooterOnL) {
+                shooterOnL = true;
+                shooterLeft.setTargetRPM(Config.POLLEN_RPM);
+            }
+            else {
+                shooterLeft.setTargetRPM(0);
+                shooterOnL = false;
+            }
+        }
+
+        if (gamepad1.dpadRightWasPressed()) {
+            if (!shooterOnR) {
+                shooterOnR = true;
+                shooterRight.setTargetRPM(Config.POLLEN_RPM);
+            }
+            else {
+                shooterRight.setTargetRPM(0);
+                shooterOnR = false;
             }
         }
 

@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Config;
 
+import com.bylazar.configurables.annotations.Configurable;
+
+@Configurable
 public class Config {
 
     //Hardware Map
@@ -13,23 +16,24 @@ public class Config {
     //public static final String IMU = "imu", COLOR = "color";
 
     //Motor reverses
-    public static final boolean REVERSE_FL = true, REVERSE_FR = false;
-    public static final boolean REVERSE_BL = true, REVERSE_BR = false;
-    public static final boolean REVERSE_TRANSFER_LEFT = true, REVERSE_TRANSFER_RIGHT = false;
-    public static final boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true; //Finalized, DO NOT TOUCH
+    public static boolean REVERSE_FL = false, REVERSE_FR = false;
+    public static boolean REVERSE_BL = true, REVERSE_BR = false;
+    public static boolean REVERSE_TRANSFER_LEFT = true, REVERSE_TRANSFER_RIGHT = false;
+    public static boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true; //Finalized, DO NOT TOUCH
 
     //Flower Intake
-    public static final double flowerDown = 0.0, flowerUp = 0.0;
+    public static double flowerDown = 0.0, flowerUp = 0.0;
 
     //Outtake
-    public static final double blockerOpenL = 0.5, blockerOpenR = 0.5;
-    public static final double blockerClosedL = 0.5, blockerClosedR = 0.5;
-    public static final double rampPollenL = 0.5, rampPollenR = 0.5;
-    public static final double rampNectarL = 0.5, rampNectarR = 0.5;
-    public static final double hoodPollenL = 0.5, hoodPollenR = 0.5;
-    public static final double hoodNectarL = 0.5, hoodNectarR = 0.5;
+    public static double blockerOpenL = 0.8, blockerOpenR = 0.8;
+    public static double blockerClosedL = 0.6, blockerClosedR = 0.6;
+    public static double rampPollenL = 0.225, rampPollenR = 0.22; //here
+    public static double rampNectarL = 0.5, rampNectarR = 0.5;
+    public static double hoodPollenL = 0.91, hoodPollenR = 0.5;
+    public static double hoodNectarL = 0.5, hoodNectarR = 0.5;
 
-    public static double hoodMinAngle = 0.5, hoodMaxAngle = 0.8;
+    public static double hoodMinAngleL = 0.6, hoodMinAngleR = 0.3;
+    public static double hoodMaxAngleL = 0.91, hoodMaxAngleR = 0.95;
     public static double ANGLE_INCREASE_RATE = 0.01;
 
     //Transfer Constants
