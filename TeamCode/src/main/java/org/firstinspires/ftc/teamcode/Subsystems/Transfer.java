@@ -23,10 +23,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class Transfer {
-
-    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
     private final Robot robot;
-    private final SingleFramePipeline pipeline = new SingleFramePipeline();
 
     public Transfer(Robot robot) {
         this.robot = robot;
@@ -53,7 +50,7 @@ public class Transfer {
 
         ArrayList<String> returnArray = new ArrayList<>();
         robot.transferCamera.startStreaming(1280, 720);
-        Mat snapshot = pipeline.getSavedFrame();
+        Mat snapshot = robot.pipeline.getSavedFrame();
         robot.transferCamera.stopStreaming();
 
         Mat startingSnap = snapshot;

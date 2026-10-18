@@ -4,6 +4,10 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.drivetrain.DrivePowers;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.follower.ManualDrive;
+import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.opencv.core.Scalar;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -33,6 +38,7 @@ public class MainTeleOp extends LinearOpMode {
     private Shooter shooterRight;
     private Outtake outtakeLeft;
     private Outtake outtakeRight;
+    private Follower follower;
     private boolean flowerDown = false;
     public static boolean isPollenL = true; //temp
     public static boolean isPollenR = true; //temp
@@ -57,6 +63,9 @@ public class MainTeleOp extends LinearOpMode {
         outtakeLeft.setHoodPosition(0.5);
         outtakeRight.setHoodPosition(0.5);
 
+        follower = Constants.create(hardwareMap);
+
+        follower.setPose(new Pose(0, 0, 0)); //Add to Config one day too lazy rn
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         telemetryM.addLine("INITIALIZED");
@@ -68,10 +77,23 @@ public class MainTeleOp extends LinearOpMode {
             shooterLeft.update();
             shooterRight.update();
 
+            DrivePowers powers = ManualDrive.fieldCentric(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    -gamepad1.right_stick_x,
+                    follower.pose().heading()
+            );
+            ManualDrive.driveOrHold(follower, powers);
+            follower.update();
+            Pose robotPose = follower.pose();
+
             GamePadControls();
 
             //Telemetry
-            telemetryM.addLine("TEST");
+            telemetryM.addLine("Localization");
+            telemetryM.addData("Robot X", robotPose.x());
+            telemetryM.addData("Robot Y", robotPose.y());
+            telemetryM.addData("Robot Heading", Math.toDegrees(robotPose.heading()));
             telemetryM.addLine("==============================");
             telemetryM.addLine("Outtake Telemetry");
             telemetryM.addData("Servo Ramp Position LEFT", outtakeLeft.getRampPosition());
@@ -196,15 +218,10 @@ public class MainTeleOp extends LinearOpMode {
             }
         }
 
-        if(gamepad1.circleWasPressed()){
-            testSnap = transfer.takeSnapshot();
+        if(gamepad1.circleWasPressed()) {
+            //testSnap = transfer.takeSnapshot();
         }
 
-        double driveY = -gamepad1.left_stick_y;
-        double driveX = gamepad1.left_stick_x;
-        double driveRotation = gamepad1.right_stick_x;
-
-        drive.drive(driveY, driveX, driveRotation);
     }
 }
 

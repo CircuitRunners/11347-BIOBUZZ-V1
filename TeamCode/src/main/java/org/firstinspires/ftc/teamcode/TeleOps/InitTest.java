@@ -46,6 +46,13 @@ public class InitTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        drive = new Drive(robot);
+        flowerIntake = new FlowerIntake(robot);
+        //transfer = new Transfer(robot);
+        shooterLeft = new Shooter(robot, robot.shooterLeft, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT, Config.kF_LEFT);
+        shooterRight = new Shooter(robot, robot.shooterRight, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT, Config.kF_RIGHT);
+        outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
+        outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
         waitForStart();
 
         while (opModeIsActive()) {
