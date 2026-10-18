@@ -9,7 +9,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Subsystems.SingleFramePipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.List;
 
@@ -24,6 +31,8 @@ public class Robot {
     public IMU imu;
     public ColorSensor color;
     public List<LynxModule> hubs;
+    public OpenCvWebcam transferCamera;
+    public SingleFramePipeline pipeline;
 
     public final Servo[] servos = new Servo[7];
 
@@ -32,6 +41,31 @@ public class Robot {
         for (LynxModule hub : hubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        // 2. Instantiate the webcam using your configuration name ("Webcam 1")
+        transferCamera = OpenCvCameraFactory.getInstance().createWebcam(
+                hardwareMap.get(WebcamName.class, "transferCamera"), cameraMonitorViewId);
+
+        // 3. Instantiate and attach your pipeline
+        pipeline = new SingleFramePipeline();
+        transferCamera.setPipeline(pipeline);
+
+        // 4. Open the camera device asynchronously (Crucial for preventing crashes)
+        transferCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                // Start streaming at 640x480 (native, stable resolution for Logitech C270)
+                transferCamera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
+
 
         frontLeft = required(hardwareMap, DcMotorEx.class, Config.FL);
         frontRight = required(hardwareMap, DcMotorEx.class, Config.FR);

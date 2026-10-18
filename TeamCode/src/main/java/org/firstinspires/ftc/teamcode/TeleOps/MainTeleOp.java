@@ -15,8 +15,12 @@ import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
+import org.opencv.core.Scalar;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 @Configurable
 @TeleOp(name = "BIOBUZZ MainTeleOp", group = "Competition")
@@ -34,6 +38,8 @@ public class MainTeleOp extends LinearOpMode {
     public static boolean isPollenR = true; //temp
     private boolean shooterOnL = false;
     private boolean shooterOnR = false;
+
+    private ArrayList<Map<String, Scalar>> testSnap = new ArrayList<>();
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
@@ -188,6 +194,10 @@ public class MainTeleOp extends LinearOpMode {
                 shooterRight.setTargetRPM(0);
                 shooterOnR = false;
             }
+        }
+
+        if(gamepad1.circleWasPressed()){
+            testSnap = transfer.takeSnapshot();
         }
 
         double driveY = -gamepad1.left_stick_y;
