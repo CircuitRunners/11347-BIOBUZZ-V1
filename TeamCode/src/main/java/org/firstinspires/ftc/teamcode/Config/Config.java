@@ -22,7 +22,7 @@ public class Config {
     public static boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true; //Finalized, DO NOT TOUCH
 
     //Flower Intake
-    public static double flowerDown = 0.0, flowerUp = 0.0;
+    public static double flowerDown = 0.0, flowerUp = 0.55;
 
     //Outtake
     public static double blockerOpenL = 0.8, blockerOpenR = 0.8;
@@ -34,10 +34,10 @@ public class Config {
 
     public static double hoodMinAngleL = 0.6, hoodMinAngleR = 0.3;
     public static double hoodMaxAngleL = 0.91, hoodMaxAngleR = 0.95;
-    public static double ANGLE_INCREASE_RATE = 0.01;
+    public static double ANGLE_INCREASE_RATE = 0.001;
 
     //Transfer Constants
-    public static double intakePower = 0.9, spitPower = -0.3;
+    public static double intakePower = 0.9, spitPower = -0.9;
 
     //Shooter Constants
     public static double POLLEN_RPM = 2900;

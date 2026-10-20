@@ -10,6 +10,7 @@ import com.pedropathing.follower.ManualDrive;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Config.Config;
 import org.firstinspires.ftc.teamcode.Config.Robot;
@@ -19,10 +20,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
-import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.opencv.core.Scalar;
-
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,7 +30,6 @@ import java.util.Map;
 @TeleOp(name = "BIOBUZZ MainTeleOp", group = "Competition")
 public class MainTeleOp extends LinearOpMode {
     private final Robot robot = new Robot();
-    private Drive drive;
     private FlowerIntake flowerIntake;
     private Transfer transfer;
     private Shooter shooterLeft;
@@ -44,15 +42,18 @@ public class MainTeleOp extends LinearOpMode {
     public static boolean isPollenR = true; //temp
     private boolean shooterOnL = false;
     private boolean shooterOnR = false;
-
+    private boolean[] isPollen = {true, false};
     private ArrayList<Map<String, Scalar>> testSnap = new ArrayList<>();
+    private int sequenceIndex = 0;
+    boolean nextSequence = false;
+    private ElapsedTime timer = new ElapsedTime();
+    public static double restTime = 0.6;
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        drive = new Drive(robot);
         flowerIntake = new FlowerIntake(robot);
         transfer = new Transfer(robot);
         shooterLeft = new Shooter(robot, robot.shooterLeft, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT, Config.kF_LEFT);
@@ -61,7 +62,9 @@ public class MainTeleOp extends LinearOpMode {
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
         outtakeLeft.setHoodPosition(0.5);
-        outtakeRight.setHoodPosition(0.5);
+        outtakeRight.setHoodPosition(0.3);
+
+        timer.reset();
 
         follower = Constants.create(hardwareMap);
 
@@ -87,7 +90,7 @@ public class MainTeleOp extends LinearOpMode {
             follower.update();
             Pose robotPose = follower.pose();
 
-            GamePadControls();
+            gamePadControls();
 
             //Telemetry
             telemetryM.addLine("Localization");
@@ -111,7 +114,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetryM.update(telemetry);
         }
     }
-    private void GamePadControls() {
+    private void gamePadControls() {
         if (gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.left_trigger > 0.1) {
             transfer.transferOn();
         }
@@ -122,17 +125,44 @@ public class MainTeleOp extends LinearOpMode {
             transfer.transferStop();
         }
 
+        if (gamepad1.leftBumperWasPressed()) {
+            sequenceIndex = 0;
+        }
+
         if (gamepad1.left_bumper) {
             outtakeLeft.setBlockerPosition(Config.blockerOpenL);
             //need to determine Shooting Algorithm - Jonathan. Code below is temporary.
-            if (isPollenL) {
-                outtakeLeft.setRampPosition(Config.rampPollenL);
-                outtakeLeft.setHoodPosition(Config.hoodPollenL);
+//            if (isPollenL) {
+//                outtakeLeft.setRampPosition(Config.rampPollenL);
+//                outtakeLeft.setHoodPosition(Config.hoodPollenL);
+//            }
+//            else {
+//                outtakeLeft.setRampPosition(Config.rampNectarL);
+//                outtakeLeft. setHoodPosition(Config.hoodNectarL);
+//            }
+
+//            if (shooterOnL & shooterLeft.getShooterVelocity() >=
+//                    shooterLeft.getTargetRPM() - 50) {
+//                nextSequence = true;
+//            }
+            if (shooterOnL & timer.seconds() > restTime & sequenceIndex != isPollen.length) {
+                nextSequence = true;
+                timer.reset();
             }
-            else {
-                outtakeLeft.setRampPosition(Config.rampNectarL);
-                outtakeLeft. setHoodPosition(Config.hoodNectarL);
+            if (nextSequence & sequenceIndex < isPollen.length) {
+                nextSequence = false;
+
+                if (isPollen[sequenceIndex]) {
+                    outtakeLeft.setRampPosition(Config.rampPollenL);
+                    outtakeLeft.setHoodPosition(Config.hoodPollenL);
+                } else {
+                    outtakeLeft.setRampPosition(Config.rampNectarL);
+                    outtakeLeft.setHoodPosition(Config.hoodNectarL);
+                }
+
+                sequenceIndex++;
             }
+
         }
         else {
             outtakeLeft.setBlockerPosition(Config.blockerClosedL);
@@ -199,6 +229,7 @@ public class MainTeleOp extends LinearOpMode {
         if (gamepad1.dpadLeftWasPressed()) {
             if (!shooterOnL) {
                 shooterOnL = true;
+                nextSequence = true;
                 shooterLeft.setTargetRPM(Config.POLLEN_RPM);
             }
             else {

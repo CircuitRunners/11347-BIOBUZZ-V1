@@ -20,6 +20,9 @@ public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 300
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
+
+        applyPIDF();
+
     }
     public void pollenRPM() {
         setTargetRPM(Config.POLLEN_RPM);
