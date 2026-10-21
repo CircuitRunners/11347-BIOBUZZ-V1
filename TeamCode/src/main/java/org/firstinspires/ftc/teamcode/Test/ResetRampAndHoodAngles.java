@@ -32,7 +32,7 @@ public class ResetRampAndHoodAngles extends OpMode {
         position = 0.5;
 
         robot.servoRampL.setPosition(position);
-        robot.servoRampL.setPosition(position);
+        robot.servoRampR.setPosition(position);
 
         robot.servoHoodL.setPosition(position);
         robot.servoHoodR.setPosition(0.3);

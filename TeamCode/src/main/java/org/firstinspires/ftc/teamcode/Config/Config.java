@@ -22,14 +22,14 @@ public class Config {
     public static boolean REVERSE_OUTTAKE_LEFT = false, REVERSE_OUTTAKE_RIGHT = true; //Finalized, DO NOT TOUCH
 
     //Flower Intake
-    public static double flowerDown = 0.0, flowerUp = 0.55;
+    public static double flowerDown = 0.5, flowerUp = 0.067;
 
     //Outtake
     public static double blockerOpenL = 0.8, blockerOpenR = 0.8;
     public static double blockerClosedL = 0.6, blockerClosedR = 0.6;
     public static double rampPollenL = 0.225, rampPollenR = 0.22; //here
     public static double rampNectarL = 0.5, rampNectarR = 0.5;
-    public static double hoodPollenL = 0.91, hoodPollenR = 0.5;
+    public static double hoodPollenL = 0.91, hoodPollenR = 0.09;
     public static double hoodNectarL = 0.5, hoodNectarR = 0.5;
 
     public static double hoodMinAngleL = 0.6, hoodMinAngleR = 0.3;
@@ -37,7 +37,7 @@ public class Config {
     public static double ANGLE_INCREASE_RATE = 0.001;
 
     //Transfer Constants
-    public static double intakePower = 0.9, spitPower = -0.9;
+    public static double intakePower = 0.9, spitPower = -0.9, transferPower = 0.6;
 
     //Shooter Constants
     public static double POLLEN_RPM = 2900;

@@ -62,7 +62,13 @@ public class MainTeleOp extends LinearOpMode {
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
         outtakeLeft.setHoodPosition(0.5);
-        outtakeRight.setHoodPosition(0.3);
+        outtakeRight.setHoodPosition(0.5);
+
+        outtakeLeft.setRampPosition(0.5);
+        outtakeRight.setRampPosition(0.5);
+
+        outtakeLeft.setBlockerPosition(Config.blockerClosedL);
+        outtakeRight.setBlockerPosition(Config.blockerClosedR);
 
         timer.reset();
 
@@ -77,6 +83,8 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            robot.clearBulkCache();
+
             shooterLeft.update();
             shooterRight.update();
 
@@ -115,8 +123,11 @@ public class MainTeleOp extends LinearOpMode {
         }
     }
     private void gamePadControls() {
-        if (gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.left_trigger > 0.1) {
+        if (gamepad1.left_trigger > 0.1) {
             transfer.transferOn();
+        }
+        else if (gamepad1.left_bumper || gamepad1.right_bumper) {
+            transfer.setTransferPower(Config.transferPower);
         }
         else if (gamepad1.right_trigger > 0.1) {
             transfer.transferSpit();
@@ -145,42 +156,42 @@ public class MainTeleOp extends LinearOpMode {
 //                    shooterLeft.getTargetRPM() - 50) {
 //                nextSequence = true;
 //            }
-            if (shooterOnL & timer.seconds() > restTime & sequenceIndex != isPollen.length) {
-                nextSequence = true;
-                timer.reset();
-            }
-            if (nextSequence & sequenceIndex < isPollen.length) {
-                nextSequence = false;
-
-                if (isPollen[sequenceIndex]) {
-                    outtakeLeft.setRampPosition(Config.rampPollenL);
-                    outtakeLeft.setHoodPosition(Config.hoodPollenL);
-                } else {
-                    outtakeLeft.setRampPosition(Config.rampNectarL);
-                    outtakeLeft.setHoodPosition(Config.hoodNectarL);
-                }
-
-                sequenceIndex++;
-            }
+//            if (shooterOnL & timer.seconds() > restTime & sequenceIndex != isPollen.length) {
+//                nextSequence = true;
+//                timer.reset();
+//            }
+//            if (nextSequence & sequenceIndex < isPollen.length) {
+//                nextSequence = false;
+//
+//                if (isPollen[sequenceIndex]) {
+//                    outtakeLeft.setRampPosition(Config.rampPollenL);
+//                    outtakeLeft.setHoodPosition(Config.hoodPollenL);
+//                } else {
+//                    outtakeLeft.setRampPosition(Config.rampNectarL);
+//                    outtakeLeft.setHoodPosition(Config.hoodNectarL);
+//                }
+//
+//                sequenceIndex++;
+//            }
 
         }
         else {
             outtakeLeft.setBlockerPosition(Config.blockerClosedL);
-            outtakeLeft.setRampPosition(0.5); //temp
-            outtakeLeft.setHoodPosition(0.5); //temp
+//            outtakeLeft.setRampPosition(0.5); //temp
+//            outtakeLeft.setHoodPosition(0.5); //temp
         }
 
         if (gamepad1.right_bumper) {
             outtakeRight.setBlockerPosition(Config.blockerOpenR);
             //need to determine Shooting Algorithm - Jonathan. Code below is temporary
-            if (isPollenR) {
-                outtakeRight.setRampPosition(Config.rampPollenR);
-                outtakeRight.setHoodPosition(Config.hoodPollenR);
-            }
-            else {
-                outtakeRight.setRampPosition(Config.rampNectarR);
-                outtakeRight.setHoodPosition(Config.hoodNectarR);
-            }
+//            if (isPollenR) {
+//                outtakeRight.setRampPosition(Config.rampPollenR);
+//                outtakeRight.setHoodPosition(Config.hoodPollenR);
+//            }
+//            else {
+//                outtakeRight.setRampPosition(Config.rampNectarR);
+//                outtakeRight.setHoodPosition(Config.hoodNectarR);
+//            }
         }
         else {
             outtakeRight.setBlockerPosition(Config.blockerClosedR);
@@ -221,15 +232,22 @@ public class MainTeleOp extends LinearOpMode {
         if (gamepad1.x) { //SQUARE
             if (flowerDown) {
                 flowerIntake.setFlowerUp();
+                flowerDown = false;
             }
             else {
                 flowerIntake.setFlowerDown();
+                flowerDown = true;
             }
         }
         if (gamepad1.dpadLeftWasPressed()) {
             if (!shooterOnL) {
                 shooterOnL = true;
                 nextSequence = true;
+                outtakeLeft.setHoodPosition(Config.hoodPollenL);
+                outtakeRight.setHoodPosition(Config.hoodPollenR);
+
+                outtakeLeft.setRampPosition(Config.rampPollenL);
+                outtakeRight.setRampPosition(Config.rampPollenR);
                 shooterLeft.setTargetRPM(Config.POLLEN_RPM);
             }
             else {
@@ -241,6 +259,11 @@ public class MainTeleOp extends LinearOpMode {
         if (gamepad1.dpadRightWasPressed()) {
             if (!shooterOnR) {
                 shooterOnR = true;
+                outtakeLeft.setHoodPosition(Config.hoodPollenL);
+                outtakeRight.setHoodPosition(Config.hoodPollenR);
+
+                outtakeLeft.setRampPosition(Config.rampPollenL);
+                outtakeRight.setRampPosition(Config.rampPollenR);
                 shooterRight.setTargetRPM(Config.POLLEN_RPM);
             }
             else {
