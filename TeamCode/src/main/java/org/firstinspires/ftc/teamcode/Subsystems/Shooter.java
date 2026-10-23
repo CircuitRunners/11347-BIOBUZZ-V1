@@ -25,12 +25,12 @@ public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 300
 
     }
     public void pollenRPM() {
-        setTargetRPM(Config.POLLEN_RPM);
+        setTargetRPM(Config.POLLEN_RPML);
     }
 
-    public void nectarRPM() {
-        setTargetRPM(Config.NECTAR_RPM);
-    }
+//    public void nectarRPM() {
+//        setTargetRPM(Config.NECTAR_RPM);
+//    }
 
     public void setTargetRPM(double targetRPM) {
         TARGET_RPM = targetRPM;

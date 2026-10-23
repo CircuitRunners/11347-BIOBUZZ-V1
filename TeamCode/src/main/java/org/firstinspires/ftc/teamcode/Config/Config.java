@@ -25,33 +25,34 @@ public class Config {
     public static double flowerDown = 0.5, flowerUp = 0.067;
 
     //Outtake
-    public static double blockerOpenL = 0.8, blockerOpenR = 0.8;
+    public static double blockerOpenL = 0.85, blockerOpenR = 0.8;
     public static double blockerClosedL = 0.6, blockerClosedR = 0.6;
-    public static double rampPollenL = 0.225, rampPollenR = 0.22; //here
+    public static double rampPollenL = 0.265, rampPollenR = 0.265; //here
     public static double rampNectarL = 0.5, rampNectarR = 0.5;
-    public static double hoodPollenL = 0.91, hoodPollenR = 0.09;
+    public static double hoodPollenL = 0.77, hoodPollenR = 0.177;
     public static double hoodNectarL = 0.5, hoodNectarR = 0.5;
 
-    public static double hoodMinAngleL = 0.6, hoodMinAngleR = 0.3;
-    public static double hoodMaxAngleL = 0.91, hoodMaxAngleR = 0.95;
+    public static double hoodMinAngleL = 0.15, hoodMinAngleR = 0.5;
+    public static double hoodMaxAngleL = 0.5, hoodMaxAngleR = 0.8; //left side is backwards
     public static double ANGLE_INCREASE_RATE = 0.001;
 
     //Transfer Constants
-    public static double intakePower = 0.9, spitPower = -0.9, transferPower = 0.6;
+    public static double intakePower = 0.9, spitPower = -0.9, transferPower = 0.35;
 
     //Shooter Constants
-    public static double POLLEN_RPM = 2900;
-    public static double NECTAR_RPM = 3000;
+    public static double POLLEN_RPML = 2570;
+    public static double POLLEN_RPMR = 2570;
+    //public static double NECTAR_RPM = 3000;
     public static double GEAR_RATIO = 1.0;
     public static double TICKS_PER_REV = 28;
-    public static double THRESHOLD = 200;
+    public static double THRESHOLD = 50;
 
-    public static double kP_LEFT = 30.0;
+    public static double kP_LEFT = 170.0;
     public static double kI_LEFT = 0.0;
     public static double kD_LEFT = 1.0;
     public static double kF_LEFT = 18.0;
 
-    public static double kP_RIGHT = 30.0;
+    public static double kP_RIGHT = 170.0;
     public static double kI_RIGHT = 0.0;
     public static double kD_RIGHT = 1.0;
     public static double kF_RIGHT = 18.5;
