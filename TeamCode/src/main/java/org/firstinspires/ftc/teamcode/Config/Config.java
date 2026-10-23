@@ -29,7 +29,7 @@ public class Config {
     public static double blockerClosedL = 0.6, blockerClosedR = 0.6;
     public static double rampPollenL = 0.265, rampPollenR = 0.265; //here
     public static double rampNectarL = 0.5, rampNectarR = 0.5;
-    public static double hoodPollenL = 0.77, hoodPollenR = 0.177;
+    public static double hoodPollenL = 0.72, hoodPollenR = 0.22;
     public static double hoodNectarL = 0.5, hoodNectarR = 0.5;
 
     public static double hoodMinAngleL = 0.15, hoodMinAngleR = 0.5;
@@ -37,11 +37,11 @@ public class Config {
     public static double ANGLE_INCREASE_RATE = 0.001;
 
     //Transfer Constants
-    public static double intakePower = 0.9, spitPower = -0.9, transferPower = 0.35;
+    public static double intakePower = 0.9, spitPower = -0.45, transferPower = 0.35;
 
     //Shooter Constants
-    public static double POLLEN_RPML = 2570;
-    public static double POLLEN_RPMR = 2570;
+    public static double POLLEN_RPML = 2660; //maybe 2650 or 2640 with new battery
+    public static double POLLEN_RPMR = 2710; // maybe 2700 or 2690 with new battery
     //public static double NECTAR_RPM = 3000;
     public static double GEAR_RATIO = 1.0;
     public static double TICKS_PER_REV = 28;
