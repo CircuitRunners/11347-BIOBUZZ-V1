@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterVelocityController;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.opencv.core.Scalar;
 
@@ -26,8 +27,8 @@ public class InitTest extends LinearOpMode {
     private Drive drive;
     private FlowerIntake flowerIntake;
     private Transfer transfer;
-    private Shooter shooterLeft;
-    private Shooter shooterRight;
+    private ShooterVelocityController shooterLeft;
+    private ShooterVelocityController shooterRight;
     private Outtake outtakeLeft;
     private Outtake outtakeRight;
     private boolean flowerDown = false;
@@ -46,8 +47,9 @@ public class InitTest extends LinearOpMode {
         drive = new Drive(robot);
         flowerIntake = new FlowerIntake(robot);
         //transfer = new Transfer(robot);
-        shooterLeft = new Shooter(robot, robot.shooterLeft, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT, Config.kF_LEFT);
-        shooterRight = new Shooter(robot, robot.shooterRight, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT, Config.kF_RIGHT);
+        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT);
+        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT);
+
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
         waitForStart();

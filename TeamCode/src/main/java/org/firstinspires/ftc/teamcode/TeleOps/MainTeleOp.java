@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Config.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterVelocityController;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.opencv.core.Scalar;
@@ -31,8 +32,8 @@ public class MainTeleOp extends LinearOpMode {
     private final Robot robot = new Robot();
     private FlowerIntake flowerIntake;
     private Transfer transfer;
-    private Shooter shooterLeft;
-    private Shooter shooterRight;
+    private ShooterVelocityController shooterLeft;
+    private ShooterVelocityController shooterRight;
     private Outtake outtakeLeft;
     private Outtake outtakeRight;
     private Follower follower;
@@ -55,8 +56,8 @@ public class MainTeleOp extends LinearOpMode {
         robot.init(hardwareMap);
         flowerIntake = new FlowerIntake(robot);
         transfer = new Transfer(robot);
-        shooterLeft = new Shooter(robot, robot.shooterLeft, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT, Config.kF_LEFT);
-        shooterRight = new Shooter(robot, robot.shooterRight, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT, Config.kF_RIGHT);
+        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT);
+        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT);
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
@@ -114,10 +115,10 @@ public class MainTeleOp extends LinearOpMode {
             telemetryM.addData("Blocker Position RIGHT", outtakeRight.getBlockerPosition());
             telemetryM.addLine("==============================");
             telemetryM.addLine("Shooter Telemetry");
-            telemetryM.addData("Shooter Target RPM LEFT", shooterLeft.getTargetRPM());
-            telemetryM.addData("Shooter Target RPM RIGHT", shooterRight.getTargetRPM());
-            telemetryM.addData("Shooter Velocity LEFT", shooterLeft.getShooterVelocity());
-            telemetryM.addData("Shooter Velocity RIGHT", shooterRight.getShooterVelocity());
+            telemetryM.addData("Shooter Target RPM LEFT", shooterLeft.getTargetRpm());
+            telemetryM.addData("Shooter Target RPM RIGHT", shooterRight.getTargetRpm());
+            telemetryM.addData("Shooter Velocity LEFT", shooterLeft.getActualRpm());
+            telemetryM.addData("Shooter Velocity RIGHT", shooterRight.getActualRpm());
             telemetryM.update(telemetry);
         }
     }
@@ -234,10 +235,10 @@ public class MainTeleOp extends LinearOpMode {
 
                 outtakeLeft.setRampPosition(Config.rampPollenL);
                 outtakeRight.setRampPosition(Config.rampPollenR);
-                shooterLeft.setTargetRPM(Config.POLLEN_RPML);
+                shooterLeft.setTargetRpm(Config.POLLEN_RPML);
             }
             else {
-                shooterLeft.setTargetRPM(0);
+                shooterLeft.setTargetRpm(0);
                 shooterOnL = false;
             }
         }
@@ -250,10 +251,10 @@ public class MainTeleOp extends LinearOpMode {
 
                 outtakeLeft.setRampPosition(Config.rampPollenL);
                 outtakeRight.setRampPosition(Config.rampPollenR);
-                shooterRight.setTargetRPM(Config.POLLEN_RPMR);
+                shooterRight.setTargetRpm(Config.POLLEN_RPMR);
             }
             else {
-                shooterRight.setTargetRPM(0);
+                shooterRight.setTargetRpm(0);
                 shooterOnR = false;
             }
         }

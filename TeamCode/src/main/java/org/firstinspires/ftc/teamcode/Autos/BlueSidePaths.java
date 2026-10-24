@@ -1,106 +1,69 @@
 package org.firstinspires.ftc.teamcode.Autos;
 
+import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
+
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 
 public class BlueSidePaths {
+
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(58, 8, 90);
-    private final Pose flowerIntake1 = poseFactory.of(30, 8, 180);
-    private final Pose flowerIntakeControl1 = poseFactory.of(35, 20, 0);
-    private final Pose flowerIntake2Start = poseFactory.of(30, 8, 180);
-    private final Pose flowerIntake2 = poseFactory.of(15, 8, 180);
-    private final Pose flowerIntake3Start = poseFactory.of(15, 8, 180);
-    private final Pose flowerIntake3 = poseFactory.of(11, 8, 190);
-    private final Pose point4Start = poseFactory.of(11, 8, 190);
-    private final Pose point4 = poseFactory.of(58, 8, 90);
-    private final Pose point5Start = poseFactory.of(58, 8, 90);
-    private final Pose point5 = poseFactory.of(58, 132, 90);
-    private final Pose point6Start = poseFactory.of(58, 132, 90);
-    private final Pose point6 = poseFactory.of(58, 126, 90);
-    private final Pose point7Start = poseFactory.of(58, 126, 90);
-    private final Pose point7 = poseFactory.of(47, 126, 90);
-    private final Pose point8Start = poseFactory.of(47, 126, 90);
-    private final Pose point8 = poseFactory.of(47, 126, 90);
-    private final Pose point9 = poseFactory.of(47, 111.7092, -90);
-    private final Pose point10Start = poseFactory.of(47, 111.7092, 90);
-    private final Pose point10 = poseFactory.of(47, 110, 90);
-    private final Pose point11Start = poseFactory.of(47, 110, 90);
-    private final Pose point11 = poseFactory.of(58, 120, 90);
-    private final Pose point12 = poseFactory.of(56.209, 21.2861, -91.0394);
-    private final Pose point13 = poseFactory.of(55.9646, 38.1488, 90.8303);
-    private final Pose point14 = poseFactory.of(60.6079, 24.2187, -71.5651);
-    private final Pose point15 = poseFactory.of(89.69, 43.7697, 33.9117);
-    private final Pose point16 = poseFactory.of(54.987, 38.882, -171.9829);
+    private final Pose start = poseFactory.of(83.5, 133, 90);
+    private final Pose path1 = poseFactory.of(133, 118, 90);
+    private final Pose path1Control1 = poseFactory.of(118.2764, 131.7714, 0);
+    private final Pose point2 = poseFactory.of(133, 133, 90);
+    private final Pose point3 = poseFactory.of(83.5, 133, 90);
+    private final Pose point4 = poseFactory.of(126.5, 94.5, 0);
+    private final Pose point4Control1 = poseFactory.of(80.8702, 113.3975, 0);
+    private final Pose point4Control2 = poseFactory.of(118.0994, 131.6503, 0);
+    private final Pose point4Control3 = poseFactory.of(126.5174, 125.7447, 0);
+    private final Pose point5 = poseFactory.of(128.5587, 94.3242, 0);
+    private final Pose point6 = poseFactory.of(106.1714, 46.1062, 0);
+    private final Pose point6Control1 = poseFactory.of(98.9099, 96.1286, 0);
+    private final Pose point6Control2 = poseFactory.of(107.764, 61.3398, 0);
+    private final Pose point7 = poseFactory.of(82.75, 8.5, 270);
+    private final Pose point7Control1 = poseFactory.of(108.4124, 14.1342, 0);
+    private final Pose point7Control2 = poseFactory.of(81.3559, 37.5199, 0);
+    private final Pose point7Control3 = poseFactory.of(81.8745, 34.1373, 0);
+    private final Pose point8 = poseFactory.of(133.3919, 20.9112, 270);
+    private final Pose point8Control1 = poseFactory.of(81.0472, 38.1298, 0);
+    private final Pose point8Control2 = poseFactory.of(109.6323, 28.1373, 0);
 
-    public Pose getStart() {
-        return start;
+    public Path path1() {
+        return Paths.curve(start, path1Control1, path1).constant(path1);
     }
 
-    public Path flowerIntake1() {
-        return Paths.curve(start, flowerIntakeControl1, flowerIntake1).linear(start, flowerIntake1);
-    }
-
-    public Path flowerIntake2() {
-        return Paths.line(flowerIntake2Start, flowerIntake2).linear(flowerIntake2Start, flowerIntake2);
+    public Path path2() {
+        return Paths.line(path1, point2).constant(point2);
     }
 
     public Path path3() {
-        return Paths.line(flowerIntake3Start, flowerIntake3).linear(flowerIntake3Start, flowerIntake3);
+        return Paths.line(point2, point3).constant(point3);
     }
 
-//    public Path path4() {
-//        return Paths.line(point4Start, point4).linear(point4Start, point4);
-//    }
-//
-//    public Path path5() {
-//        return Paths.line(point5Start, point5).linear(point5Start, point5);
-//    }
-//
-//    public Path path6() {
-//        return Paths.line(point6Start, point6).linear(point6Start, point6);
-//    }
+    public Path path4() {
+        return Paths.curve(point3, point4Control1, point4Control2, point4Control3, point4).linear(point3, point4);
+    }
 
-//    public Path path7() {
-//        return Paths.line(point7Start, point7).linear(point7Start, point7);
-//    }
-//
-//    public Path path8() {
-//        return Paths.line(point8Start, point8).linear(point8Start, point8);
-//    }
-//
-//    public Path path9() {
-//        return Paths.line(point8, point9).tangent();
-//    }
-//
-//    public Path path10() {
-//        return Paths.line(point10Start, point10).linear(point10Start, point10);
-//    }
-//
-//    public Path path11() {
-//        return Paths.line(point11Start, point11).linear(point11Start, point11);
-//    }
-//
-//    public Path path12() {
-//        return Paths.line(point11, point12).tangent();
-//    }
-//
-//    public Path path13() {
-//        return Paths.line(point12, point13).tangent();
-//    }
-//
-//    public Path path14() {
-//        return Paths.line(point13, point14).tangent();
-//    }
-//
-//    public Path path15() {
-//        return Paths.line(point14, point15).tangent();
-//    }
-//
-//    public Path path16() {
-//        return Paths.line(point15, point16).tangent();
-//    }
+    public Path path5() {
+        return Paths.line(point4, point5).constant(point5);
+    }
+
+    public Path path6() {
+        return Paths.curve(point5, point6Control1, point6Control2, point6).constant(point6);
+    }
+
+    public Path path7() {
+        return Paths.curve(point6, point7Control1, point7Control2, point7Control3, point7).linear(point6, point7);
+    }
+
+    public Path path8() {
+        return Paths.curve(point7, point8Control1, point8Control2, point8).constant(point8);
+    }
+    public Pose getStart(){
+        return start;
+    }
 }

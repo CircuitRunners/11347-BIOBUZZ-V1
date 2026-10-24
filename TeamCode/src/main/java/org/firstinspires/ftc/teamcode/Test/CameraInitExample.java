@@ -5,10 +5,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Subsystems.SingleFramePipeline;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Autonomous(name = "Camera Init Example", group = "Concept")
 public class CameraInitExample extends LinearOpMode {
@@ -50,20 +58,95 @@ public class CameraInitExample extends LinearOpMode {
 
         // Wait for the user to press INIT on the Driver Station
         waitForStart();
-
-        // Match starts here - you can check if your single frame was captured
-        if (pipeline.isFrameCaptured()) {
-            telemetry.addData("Vision", "Frame captured successfully!");
-        } else {
-            telemetry.addData("Vision", "Frame not yet captured.");
-        }
         telemetry.update();
 
         while (opModeIsActive()) {
-            idle();
+            if(gamepad1.circleWasPressed()){
+
+                ArrayList<String> print = takeSnapshot();
+                telemetry.addData("print", print);
+                telemetry.update();
+            }
         }
 
         // Clean up resources when done webcam.stopStreaming();
 
+    }
+
+    public ArrayList<String> takeSnapshot() {
+
+        ArrayList<String> returnArray = new ArrayList<>();
+        webcam.startStreaming(1280, 720);
+        Mat snapshot = pipeline.getSavedFrame();
+        webcam.stopStreaming();
+
+        Mat startingSnap = snapshot;
+
+        int w = startingSnap.cols() / 2;
+        int h = startingSnap.rows() / 2;
+
+        Mat topLeft = startingSnap.submat(0, h, 0, w).clone();
+        Mat topRight = startingSnap.submat(0, h, w, 2*w).clone();
+        Mat bottomLeft = startingSnap.submat(h, 2*h, 0, w).clone();
+        Mat bottomRight = startingSnap.submat(h, 2*h, w, 2*w).clone();
+
+        List<Mat> viewBoxes = List.of(topLeft, topRight, bottomLeft, bottomRight);
+        List<String> returnNames = List.of("topLeft", "topRight", "bottomLeft", "bottomRight");
+
+        int i = 0;
+        for (Mat viewBox : viewBoxes) {
+
+            Mat gray = new Mat();
+            Imgproc.cvtColor(viewBox, gray, Imgproc.COLOR_BGR2GRAY);
+
+            Mat mask = new Mat();
+            Imgproc.threshold(gray, mask, 75, 255, Imgproc.THRESH_BINARY);
+
+            int totalPixels = viewBox.rows() * viewBox.cols();
+            int nonBlackPixels = Core.countNonZero(mask);
+            int blackPixels = totalPixels - nonBlackPixels;
+
+            double maskedPercent = (blackPixels / (double) totalPixels) * 100.0;
+
+            Scalar avgBgr;
+            if (nonBlackPixels == 0) {
+                avgBgr = new Scalar(0, 0, 0);
+            } else {
+                avgBgr = Core.mean(viewBox, mask);
+            }
+
+            Mat bgrMat = new Mat(1, 1, CvType.CV_8UC3);
+            bgrMat.put(0, 0, new double[]{
+                    avgBgr.val[0],
+                    avgBgr.val[1],
+                    avgBgr.val[2]
+            });
+
+            Mat hsvMat = new Mat();
+            Imgproc.cvtColor(bgrMat, hsvMat, Imgproc.COLOR_BGR2HSV);
+            double[] hsv = hsvMat.get(0, 0);
+
+            bgrMat.release();
+            hsvMat.release();
+            gray.release();
+            mask.release();
+            telemetry.addData("thing", maskedPercent + "|" + hsv[0] + "," + hsv[1] + "," + hsv[2]);
+            if(maskedPercent > 75.0){
+                returnArray.add("NO GAME PIECE" + hsv[0]+ " | " + maskedPercent);
+            }else{
+                if(hsv[0] < 2.5 || hsv[0] > 170.0){
+                    returnArray.add("NECTAR" + hsv[0]);
+                }else
+                if(hsv[0] > 100 && hsv[0] < 127.5){
+                    returnArray.add("NECTAR" + hsv[0]);
+                }else
+                if(hsv[0] > 17.5 && hsv[0] < 27.5){
+                    returnArray.add("POLLEN" + hsv[0]);
+                }else{returnArray.add("NO GAME PIECE" + hsv[0]);}
+            }
+            i++;
+        }
+
+        return returnArray;
     }
 }

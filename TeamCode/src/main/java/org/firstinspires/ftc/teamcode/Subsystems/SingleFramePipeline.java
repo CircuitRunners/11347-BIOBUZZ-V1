@@ -9,12 +9,12 @@ public class SingleFramePipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        // Capture only once safely
+
         if (!frameCaptured) {
-            input.copyTo(savedFrame); // Safer than clone() for pre-allocated Mats
+            input.copyTo(savedFrame);
             frameCaptured = true;
         }
-        return input; // Always return the input so the preview doesn't freeze
+        return input;
     }
 
     public boolean isFrameCaptured() {

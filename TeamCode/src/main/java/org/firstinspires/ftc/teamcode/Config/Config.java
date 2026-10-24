@@ -13,7 +13,10 @@ public class Config {
     public static final String servoHoodL = "hl", servoHoodR = "hr"; //hood Left, hood Right
     public static final String servoBlockerL = "blockl", servoBlockerR = "blockr"; //blocker left, blocker right
     public static final String servoFlower = "flower";
-    //public static final String IMU = "imu", COLOR = "color";
+    //public static final String IMU = "imu"
+    //COLOR = "color";
+
+    public static final String voltageSensor = "voltageSensor";
 
     //Motor reverses
     public static boolean REVERSE_FL = false, REVERSE_FR = false;
@@ -47,15 +50,13 @@ public class Config {
     public static double TICKS_PER_REV = 28;
     public static double THRESHOLD = 50;
 
-    public static double kP_LEFT = 170.0;
+    public static double kP_LEFT = 0.0;
     public static double kI_LEFT = 0.0;
-    public static double kD_LEFT = 1.0;
-    public static double kF_LEFT = 18.0;
+    public static double kD_LEFT = 0.0;
 
-    public static double kP_RIGHT = 170.0;
+    public static double kP_RIGHT = 0.0;
     public static double kI_RIGHT = 0.0;
-    public static double kD_RIGHT = 1.0;
-    public static double kF_RIGHT = 18.5;
+    public static double kD_RIGHT = 0.0;
 
     //----------------------
 

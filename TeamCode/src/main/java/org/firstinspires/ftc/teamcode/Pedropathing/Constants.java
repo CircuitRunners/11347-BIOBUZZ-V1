@@ -41,14 +41,14 @@ public class Constants {
         c.xPodPort.set(7);
         c.yPodPort.set(6);
         c.ticksPerUnit.set(505.316944406);
-        c.xPodOffset.set(1.2007874015748032);
-        c.yPodOffset.set(-7.165354330708661);
+        c.xPodOffset.set(1.220472440944882);
+        c.yPodOffset.set(-6.8110236220472435);
         c.xPodDirection.set(OctoQuad.EncoderDirection.REVERSE);
         c.yPodDirection.set(OctoQuad.EncoderDirection.REVERSE);
         c.globalDistanceUnit.set(DistanceUnit.INCH);
         c.offsetUnits.set(DistanceUnit.INCH);
         c.i2cRecoveryMode.set(OctoQuad.I2cRecoveryMode.MODE_1_PERIPH_RST_ON_FRAME_ERR);
-        c.headingScalar.set(1.0830637917376482);
+        c.headingScalar.set(1.043540755520722);
     });
 
     public static ForesightConfig foresightConfig = new ForesightConfig(
