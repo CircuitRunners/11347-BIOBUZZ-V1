@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
+import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 
 public class FlowerIntake {
@@ -11,9 +11,9 @@ public class FlowerIntake {
     }
 
     public void setFlowerDown() {
-        robot.servoFlower.setPosition(Config.flowerDown);
+        robot.servoFlower.setPosition(ConfigTemp.flowerDown);
     }
     public void setFlowerUp() {
-        robot.servoFlower.setPosition(Config.flowerUp);
+        robot.servoFlower.setPosition(ConfigTemp.flowerUp);
     }
 }

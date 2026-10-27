@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Autos;
 
-import static com.pedropathing.api.Paths.*;
 import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
@@ -11,25 +10,20 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.api.Paths;
 
-import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
-import com.pedropathing.math.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.utils.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
+import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.Subsystems.ShooterVelocityController;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShooterVelocityController;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 @Configurable
 @Autonomous(name = "BIOBUZZ Blue Side AUto", group = "Competition")
@@ -53,8 +47,8 @@ public class BlueSideAuto extends LinearOpMode {
 
         flowerIntake = new FlowerIntake(robot);
         transfer = new Transfer(robot);
-        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT);
-        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT);
+        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_LEFT, ConfigTemp.kI_LEFT, ConfigTemp.kD_LEFT);
+        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_RIGHT, ConfigTemp.kI_RIGHT, ConfigTemp.kD_RIGHT);
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
@@ -64,8 +58,8 @@ public class BlueSideAuto extends LinearOpMode {
         outtakeLeft.setRampPosition(0.5);
         outtakeRight.setRampPosition(0.5);
 
-        outtakeLeft.setBlockerPosition(Config.blockerClosedL);
-        outtakeRight.setBlockerPosition(Config.blockerClosedR);
+        outtakeLeft.setBlockerPosition(ConfigTemp.blockerClosedL);
+        outtakeRight.setBlockerPosition(ConfigTemp.blockerClosedR);
 
         pathTimer = new Timer();
 
@@ -99,33 +93,33 @@ public class BlueSideAuto extends LinearOpMode {
     private Command autoRoutine() {
         return sequential(
                 instant(() -> {
-                    shooterLeft.setTargetRpm(Config.POLLEN_RPML);
-                    shooterRight.setTargetRpm(Config.POLLEN_RPMR);
-                    outtakeLeft.setHoodPosition(Config.hoodPollenL);
-                    outtakeRight.setHoodPosition(Config.hoodPollenR);
-                    outtakeLeft.setRampPosition(Config.rampPollenL);
-                    outtakeRight.setRampPosition(Config.rampPollenR);
+                    shooterLeft.setTargetRpm(ConfigTemp.POLLEN_RPML);
+                    shooterRight.setTargetRpm(ConfigTemp.POLLEN_RPMR);
+                    outtakeLeft.setHoodPosition(ConfigTemp.hoodPollenL);
+                    outtakeRight.setHoodPosition(ConfigTemp.hoodPollenR);
+                    outtakeLeft.setRampPosition(ConfigTemp.rampPollenL);
+                    outtakeRight.setRampPosition(ConfigTemp.rampPollenR);
                 }),
 
                 waitMs(1000),
 
                 instant(() -> {
-                    transfer.setTransferPower(Config.transferPower);
-                    outtakeLeft.setBlockerPosition(Config.blockerOpenL);
+                    transfer.setTransferPower(ConfigTemp.transferPower);
+                    outtakeLeft.setBlockerPosition(ConfigTemp.blockerOpenL);
                 }),
 
                 waitMs(2000),
 
                 instant(() -> {
-                    outtakeLeft.setBlockerPosition(Config.blockerClosedL);
-                    outtakeRight.setBlockerPosition(Config.blockerOpenR);
+                    outtakeLeft.setBlockerPosition(ConfigTemp.blockerClosedL);
+                    outtakeRight.setBlockerPosition(ConfigTemp.blockerOpenR);
                 }),
 
                 waitMs(2000),
 
                 instant(() -> {
                     transfer.setTransferPower(0);
-                    outtakeRight.setBlockerPosition(Config.blockerClosedR);
+                    outtakeRight.setBlockerPosition(ConfigTemp.blockerClosedR);
                 }),
 
                 follow(follower, paths.path1()),

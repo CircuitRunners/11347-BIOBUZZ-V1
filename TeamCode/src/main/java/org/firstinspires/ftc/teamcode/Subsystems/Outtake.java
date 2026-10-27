@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 
 public class Outtake {

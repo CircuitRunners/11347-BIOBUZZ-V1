@@ -12,13 +12,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
+import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 
 import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.Subsystems.ShooterVelocityController;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShooterVelocityController;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.opencv.core.Scalar;
@@ -56,8 +55,8 @@ public class MainTeleOp extends LinearOpMode {
         robot.init(hardwareMap);
         flowerIntake = new FlowerIntake(robot);
         transfer = new Transfer(robot);
-        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT);
-        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT);
+        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_LEFT, ConfigTemp.kI_LEFT, ConfigTemp.kD_LEFT);
+        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_RIGHT, ConfigTemp.kI_RIGHT, ConfigTemp.kD_RIGHT);
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);
 
@@ -67,8 +66,8 @@ public class MainTeleOp extends LinearOpMode {
         outtakeLeft.setRampPosition(0.5);
         outtakeRight.setRampPosition(0.5);
 
-        outtakeLeft.setBlockerPosition(Config.blockerClosedL);
-        outtakeRight.setBlockerPosition(Config.blockerClosedR);
+        outtakeLeft.setBlockerPosition(ConfigTemp.blockerClosedL);
+        outtakeRight.setBlockerPosition(ConfigTemp.blockerClosedR);
 
         timer.reset();
 
@@ -127,7 +126,7 @@ public class MainTeleOp extends LinearOpMode {
             transfer.transferOn();
         }
         else if (gamepad1.left_bumper || gamepad1.right_bumper) {
-            transfer.setTransferPower(Config.transferPower);
+            transfer.setTransferPower(ConfigTemp.transferPower);
         }
         else if (gamepad1.right_trigger > 0.1) {
             transfer.transferSpit();
@@ -141,7 +140,7 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         if (gamepad1.left_bumper) {
-            outtakeLeft.setBlockerPosition(Config.blockerOpenL);
+            outtakeLeft.setBlockerPosition(ConfigTemp.blockerOpenL);
             //need to determine Shooting Algorithm - Jonathan. Code below is temporary.
 //            if (isPollenL) {
 //                outtakeLeft.setRampPosition(Config.rampPollenL);
@@ -176,39 +175,39 @@ public class MainTeleOp extends LinearOpMode {
 
         }
         else {
-            outtakeLeft.setBlockerPosition(Config.blockerClosedL);
+            outtakeLeft.setBlockerPosition(ConfigTemp.blockerClosedL);
         }
 
         if (gamepad1.right_bumper) {
-            outtakeRight.setBlockerPosition(Config.blockerOpenR);
+            outtakeRight.setBlockerPosition(ConfigTemp.blockerOpenR);
         }
         else {
-            outtakeRight.setBlockerPosition(Config.blockerClosedR);
+            outtakeRight.setBlockerPosition(ConfigTemp.blockerClosedR);
         }
 
         if (gamepad2.left_stick_y > 0.1) {
             double servo_pos = outtakeLeft.getHoodPosition();
-            if (servo_pos < Config.hoodMaxAngleL) {
-                outtakeLeft.setHoodPosition(servo_pos + Config.ANGLE_INCREASE_RATE);
+            if (servo_pos < ConfigTemp.hoodMaxAngleL) {
+                outtakeLeft.setHoodPosition(servo_pos + ConfigTemp.ANGLE_INCREASE_RATE);
             }
         }
         else if (gamepad2.left_stick_y < -0.1) {
             double servo_pos = outtakeLeft.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngleL) {
-                outtakeLeft.setHoodPosition(servo_pos - Config.ANGLE_INCREASE_RATE);
+            if (servo_pos > ConfigTemp.hoodMinAngleL) {
+                outtakeLeft.setHoodPosition(servo_pos - ConfigTemp.ANGLE_INCREASE_RATE);
             }
         }
 
         if (gamepad2.right_stick_y > 0.1) {
             double servo_pos = outtakeRight.getHoodPosition();
-            if (servo_pos < Config.hoodMaxAngleR) {
-                outtakeRight.setHoodPosition(servo_pos + Config.ANGLE_INCREASE_RATE);
+            if (servo_pos < ConfigTemp.hoodMaxAngleR) {
+                outtakeRight.setHoodPosition(servo_pos + ConfigTemp.ANGLE_INCREASE_RATE);
             }
         }
         else if (gamepad2.right_stick_y < 0.1) {
             double servo_pos = outtakeRight.getHoodPosition();
-            if (servo_pos > Config.hoodMinAngleR) {
-                outtakeRight.setHoodPosition(servo_pos - Config.ANGLE_INCREASE_RATE);
+            if (servo_pos > ConfigTemp.hoodMinAngleR) {
+                outtakeRight.setHoodPosition(servo_pos - ConfigTemp.ANGLE_INCREASE_RATE);
             }
         }
 
@@ -230,12 +229,12 @@ public class MainTeleOp extends LinearOpMode {
             if (!shooterOnL) {
                 shooterOnL = true;
                 nextSequence = true;
-                outtakeLeft.setHoodPosition(Config.hoodPollenL);
-                outtakeRight.setHoodPosition(Config.hoodPollenR);
+                outtakeLeft.setHoodPosition(ConfigTemp.hoodPollenL);
+                outtakeRight.setHoodPosition(ConfigTemp.hoodPollenR);
 
-                outtakeLeft.setRampPosition(Config.rampPollenL);
-                outtakeRight.setRampPosition(Config.rampPollenR);
-                shooterLeft.setTargetRpm(Config.POLLEN_RPML);
+                outtakeLeft.setRampPosition(ConfigTemp.rampPollenL);
+                outtakeRight.setRampPosition(ConfigTemp.rampPollenR);
+                shooterLeft.setTargetRpm(ConfigTemp.POLLEN_RPML);
             }
             else {
                 shooterLeft.setTargetRpm(0);
@@ -246,12 +245,12 @@ public class MainTeleOp extends LinearOpMode {
         if (gamepad1.dpadRightWasPressed()) {
             if (!shooterOnR) {
                 shooterOnR = true;
-                outtakeLeft.setHoodPosition(Config.hoodPollenL);
-                outtakeRight.setHoodPosition(Config.hoodPollenR);
+                outtakeLeft.setHoodPosition(ConfigTemp.hoodPollenL);
+                outtakeRight.setHoodPosition(ConfigTemp.hoodPollenR);
 
-                outtakeLeft.setRampPosition(Config.rampPollenL);
-                outtakeRight.setRampPosition(Config.rampPollenR);
-                shooterRight.setTargetRpm(Config.POLLEN_RPMR);
+                outtakeLeft.setRampPosition(ConfigTemp.rampPollenL);
+                outtakeRight.setRampPosition(ConfigTemp.rampPollenR);
+                shooterRight.setTargetRpm(ConfigTemp.POLLEN_RPMR);
             }
             else {
                 shooterRight.setTargetRpm(0);

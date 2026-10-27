@@ -6,14 +6,13 @@ import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
+import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.Subsystems.FlowerIntake;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.Subsystems.ShooterVelocityController;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShooterVelocityController;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.opencv.core.Scalar;
 
@@ -47,8 +46,8 @@ public class InitTest extends LinearOpMode {
         drive = new Drive(robot);
         flowerIntake = new FlowerIntake(robot);
         //transfer = new Transfer(robot);
-        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_LEFT, Config.kI_LEFT, Config.kD_LEFT);
-        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, Config.kP_RIGHT, Config.kI_RIGHT, Config.kD_RIGHT);
+        shooterLeft = new ShooterVelocityController(robot.shooterLeft, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_LEFT, ConfigTemp.kI_LEFT, ConfigTemp.kD_LEFT);
+        shooterRight = new ShooterVelocityController(robot.shooterRight, robot.voltageSensor, 29, 12,  1.85e-04, 0.1580, ConfigTemp.kP_RIGHT, ConfigTemp.kI_RIGHT, ConfigTemp.kD_RIGHT);
 
         outtakeLeft = new Outtake(robot, robot.servoBlockerL, robot.servoRampL, robot.servoHoodL);
         outtakeRight = new Outtake(robot, robot.servoBLockerR, robot.servoRampR, robot.servoHoodR);

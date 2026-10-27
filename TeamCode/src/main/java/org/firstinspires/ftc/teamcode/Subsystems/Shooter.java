@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Config.Robot;
-import org.firstinspires.ftc.teamcode.Config.Config;
+import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 
 public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 3000 RPM nectar
     private final Robot robot;
@@ -25,7 +25,7 @@ public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 300
 
     }
     public void pollenRPM() {
-        setTargetRPM(Config.POLLEN_RPML);
+        setTargetRPM(ConfigTemp.POLLEN_RPML);
     }
 
 //    public void nectarRPM() {
@@ -44,8 +44,8 @@ public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 300
         shooter.setVelocityPIDFCoefficients(kP, kI, kD, kF);}
 
     public void update() {
-        double targetMotorRPM = TARGET_RPM / Config.GEAR_RATIO;
-        double targetTicksPerSec = (targetMotorRPM * Config.TICKS_PER_REV) / 60.0;
+        double targetMotorRPM = TARGET_RPM / ConfigTemp.GEAR_RATIO;
+        double targetTicksPerSec = (targetMotorRPM * ConfigTemp.TICKS_PER_REV) / 60.0;
         shooter.setVelocity(targetTicksPerSec);
     }
 
@@ -57,12 +57,12 @@ public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 300
     public double getShooterVelocity() {
 
         double currTicksPerSec = shooter.getVelocity(); // ticks/s of motor
-        double currMotorRPM = (currTicksPerSec * 60) / Config.TICKS_PER_REV;
+        double currMotorRPM = (currTicksPerSec * 60) / ConfigTemp.TICKS_PER_REV;
 
         return currMotorRPM;
     }
 
     public boolean isAtTargetThreshold() {
-        return ((getShooterVelocity() > (getTargetRPM() - Config.THRESHOLD)) && getShooterVelocity() != 0);
+        return ((getShooterVelocity() > (getTargetRPM() - ConfigTemp.THRESHOLD)) && getShooterVelocity() != 0);
     }
 }

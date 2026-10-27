@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Config;
 
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -10,10 +9,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Subsystems.SingleFramePipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -69,27 +66,27 @@ public class Robot {
         });
 
 
-        frontLeft = required(hardwareMap, DcMotorEx.class, Config.FL);
-        frontRight = required(hardwareMap, DcMotorEx.class, Config.FR);
-        backLeft = required(hardwareMap, DcMotorEx.class, Config.BL);
-        backRight = required(hardwareMap, DcMotorEx.class, Config.BR);
+        frontLeft = required(hardwareMap, DcMotorEx.class, ConfigTemp.FL);
+        frontRight = required(hardwareMap, DcMotorEx.class, ConfigTemp.FR);
+        backLeft = required(hardwareMap, DcMotorEx.class, ConfigTemp.BL);
+        backRight = required(hardwareMap, DcMotorEx.class, ConfigTemp.BR);
 
-        transferLeft = required(hardwareMap, DcMotorEx.class, Config.transferL);
-        transferRight = required(hardwareMap, DcMotorEx.class, Config.transferR);
+        transferLeft = required(hardwareMap, DcMotorEx.class, ConfigTemp.transferL);
+        transferRight = required(hardwareMap, DcMotorEx.class, ConfigTemp.transferR);
 
-        shooterLeft = required(hardwareMap, DcMotorEx.class, Config.shooterL);
-        shooterRight = required(hardwareMap, DcMotorEx.class, Config.shooterR);
+        shooterLeft = required(hardwareMap, DcMotorEx.class, ConfigTemp.shooterL);
+        shooterRight = required(hardwareMap, DcMotorEx.class, ConfigTemp.shooterR);
 
-        servoBlockerL = required(hardwareMap, Servo.class, Config.servoBlockerL);
-        servoBLockerR = required(hardwareMap, Servo.class, Config.servoBlockerR);
+        servoBlockerL = required(hardwareMap, Servo.class, ConfigTemp.servoBlockerL);
+        servoBLockerR = required(hardwareMap, Servo.class, ConfigTemp.servoBlockerR);
 
-        servoRampL = required(hardwareMap, Servo.class, Config.servoRampL);
-        servoRampR = required(hardwareMap, Servo.class, Config.servoRampR);
+        servoRampL = required(hardwareMap, Servo.class, ConfigTemp.servoRampL);
+        servoRampR = required(hardwareMap, Servo.class, ConfigTemp.servoRampR);
 
-        servoHoodL = required(hardwareMap, Servo.class, Config.servoHoodL);
-        servoHoodR = required(hardwareMap, Servo.class, Config.servoHoodR);
+        servoHoodL = required(hardwareMap, Servo.class, ConfigTemp.servoHoodL);
+        servoHoodR = required(hardwareMap, Servo.class, ConfigTemp.servoHoodR);
 
-        servoFlower = required(hardwareMap, Servo.class, Config.servoFlower);
+        servoFlower = required(hardwareMap, Servo.class, ConfigTemp.servoFlower);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().hasNext()
                 ? hardwareMap.voltageSensor.iterator().next() : null;
@@ -97,23 +94,23 @@ public class Robot {
         //imu = required(hardwareMap, IMU.class, Config.IMU);
         //color = required(hardwareMap, ColorSensor.class, Config.COLOR);
 
-        frontLeft.setDirection(Config.REVERSE_FL ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
-        frontRight.setDirection(Config.REVERSE_FR ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
-        backLeft.setDirection(Config.REVERSE_BL ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
-        backRight.setDirection(Config.REVERSE_BR ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(ConfigTemp.REVERSE_FL ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        frontRight.setDirection(ConfigTemp.REVERSE_FR ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        backLeft.setDirection(ConfigTemp.REVERSE_BL ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        backRight.setDirection(ConfigTemp.REVERSE_BR ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
 
-        shooterLeft.setDirection(Config.REVERSE_OUTTAKE_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        shooterLeft.setDirection(ConfigTemp.REVERSE_OUTTAKE_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        shooterRight.setDirection(Config.REVERSE_OUTTAKE_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        shooterRight.setDirection(ConfigTemp.REVERSE_OUTTAKE_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        transferLeft.setDirection(Config.REVERSE_TRANSFER_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
-        transferRight.setDirection(Config.REVERSE_TRANSFER_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        transferLeft.setDirection(ConfigTemp.REVERSE_TRANSFER_LEFT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
+        transferRight.setDirection(ConfigTemp.REVERSE_TRANSFER_RIGHT ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
 
         configureMotor(frontLeft, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         configureMotor(frontRight, DcMotor.RunMode.RUN_WITHOUT_ENCODER);

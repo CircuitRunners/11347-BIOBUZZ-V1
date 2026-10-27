@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.Subsystems.Subclasses;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,30 +7,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ShooterVelocityController {
 
-    // ==== FF constants (replace with your fitted values) ====
-    private double K_V;//= 1.85e-04;   // example placeholder
-    private double K_S;//= 0.1580;         // example placeholder
-    // ==== hardware / params ====
-    private final DcMotorEx leader;   // has encoder
+    private double K_V;//= 1.85e-04;
+    private double K_S;//= 0.1580;
+    private final DcMotorEx leader;
     private final VoltageSensor vSensor;
     private final double ticksPerRev;
     private final double nominalVolt;
 
-    // ==== PID gains (tune as needed) ====
     private double Kp;
     private double Ki;
     private double Kd;
 
-    // ==== I-term guards ====
     private double iZoneRpm   = 1000.0;
     private double iMaxAbs    = 0.30;
     private double leakPerSec = 0.05;
     private double satMargin  = 0.02;
 
-    // ==== D low-pass filter ====
     private double dCutHz = 10.0;
 
-    // ==== state ====
     private final ElapsedTime timer = new ElapsedTime();
     private double lastTimeS = 0.0;
     private double lastActualRpm = 0.0;
@@ -71,9 +65,8 @@ public class ShooterVelocityController {
         timer.reset(); lastTimeS = timer.seconds();
     }
 
-    public void setTargetRpm(double rpm) { targetRpm = Math.max(0.0, rpm); } // forward only
+    public void setTargetRpm(double rpm) { targetRpm = Math.max(0.0, rpm); }
 
-    /** Call ~every 10ms; returns applied power [0..1] */
     public double update() {
         double now = timer.seconds();
         double dt = now - lastTimeS;
