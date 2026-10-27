@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -34,7 +33,6 @@ public class Robot {
     public List<LynxModule> hubs;
     public OpenCvWebcam transferCamera;
     public SingleFramePipeline pipeline;
-    public VoltageSensor voltageSensor;
 
     public final Servo[] servos = new Servo[7];
 
@@ -90,9 +88,6 @@ public class Robot {
         servoHoodR = required(hardwareMap, Servo.class, Config.servoHoodR);
 
         servoFlower = required(hardwareMap, Servo.class, Config.servoFlower);
-
-        voltageSensor = hardwareMap.voltageSensor.iterator().hasNext()
-                ? hardwareMap.voltageSensor.iterator().next() : null;
 
         //imu = required(hardwareMap, IMU.class, Config.IMU);
         //color = required(hardwareMap, ColorSensor.class, Config.COLOR);

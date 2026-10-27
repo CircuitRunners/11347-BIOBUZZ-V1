@@ -13,10 +13,7 @@ public class Config {
     public static final String servoHoodL = "hl", servoHoodR = "hr"; //hood Left, hood Right
     public static final String servoBlockerL = "blockl", servoBlockerR = "blockr"; //blocker left, blocker right
     public static final String servoFlower = "flower";
-    //public static final String IMU = "imu"
-    //COLOR = "color";
-
-    public static final String voltageSensor = "voltageSensor";
+    //public static final String IMU = "imu", COLOR = "color";
 
     //Motor reverses
     public static boolean REVERSE_FL = false, REVERSE_FR = false;
@@ -30,9 +27,9 @@ public class Config {
     //Outtake
     public static double blockerOpenL = 0.85, blockerOpenR = 0.8;
     public static double blockerClosedL = 0.6, blockerClosedR = 0.6;
-    public static double rampPollenL = 0.265, rampPollenR = 0.265; //here
+    public static double rampPollenL = 0.255, rampPollenR = 0.255; //here
     public static double rampNectarL = 0.5, rampNectarR = 0.5;
-    public static double hoodPollenL = 0.72, hoodPollenR = 0.22;
+    public static double hoodPollenL = 0.755, hoodPollenR = 0.165;
     public static double hoodNectarL = 0.5, hoodNectarR = 0.5;
 
     public static double hoodMinAngleL = 0.15, hoodMinAngleR = 0.5;
@@ -40,23 +37,25 @@ public class Config {
     public static double ANGLE_INCREASE_RATE = 0.001;
 
     //Transfer Constants
-    public static double intakePower = 0.9, spitPower = -0.45, transferPower = 0.35;
+    public static double intakePower = 0.9, spitPower = -0.45, transferPower = 0.33;
 
     //Shooter Constants
-    public static double POLLEN_RPML = 2660; //maybe 2650 or 2640 with new battery
-    public static double POLLEN_RPMR = 2710; // maybe 2700 or 2690 with new battery
+    public static double POLLEN_RPML = 2710;
+    public static double POLLEN_RPMR = 2730;
     //public static double NECTAR_RPM = 3000;
     public static double GEAR_RATIO = 1.0;
     public static double TICKS_PER_REV = 28;
     public static double THRESHOLD = 50;
 
-    public static double kP_LEFT = 0.0;
+    public static double kP_LEFT = 170.0;
     public static double kI_LEFT = 0.0;
-    public static double kD_LEFT = 0.0;
+    public static double kD_LEFT = 1.0;
+    public static double kF_LEFT = 18.0;
 
-    public static double kP_RIGHT = 0.0;
+    public static double kP_RIGHT = 170.0;
     public static double kI_RIGHT = 0.0;
-    public static double kD_RIGHT = 0.0;
+    public static double kD_RIGHT = 1.0;
+    public static double kF_RIGHT = 18.5;
 
     //----------------------
 
