@@ -1,68 +1,46 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.Config.Robot;
-import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
+import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShooterVelocityController;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 
-public class Shooter { //MAX RPM is 4150 18F 30P 1D, try 2900 RPM pollen and 3000 RPM nectar
-    private final Robot robot;
-    private DcMotorEx shooter;
-    private double TARGET_RPM = 0.0;
-    private double kP;
-    private double kI;
-    private double kD;
-    private double kF;
-    public Shooter(Robot robot, DcMotorEx shooter, double kP, double kI, double kD, double kF) {
-        this.robot = robot;
-        this.shooter = shooter;
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kF = kF;
+public class Shooter {
+    private DcMotorEx leftShooterMotor;
+    private DcMotorEx rightShooterMotor;
+    private VoltageSensor voltageSensor;
 
-        applyPIDF();
+    private ShooterVelocityController leftShooter;
+    private ShooterVelocityController rightShooter;
 
-    }
-    public void pollenRPM() {
-        setTargetRPM(ConfigTemp.POLLEN_RPML);
-    }
+    Transfer transfer = new Transfer();
 
-//    public void nectarRPM() {
-//        setTargetRPM(Config.NECTAR_RPM);
-//    }
+    private double lkp = 0.0;
+    private double lki = 0.0;
+    private double lkd = 0.0;
 
-    public void setTargetRPM(double targetRPM) {
-        TARGET_RPM = targetRPM;
-    }
+    private double rkp = 0.0;
+    private double rki = 0.0;
+    private double rkd = 0.0;
 
-    public double getTargetRPM() {
-        return TARGET_RPM;
+    public Shooter(){
+        leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
+        rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().hasNext()
+                ? hardwareMap.voltageSensor.iterator().next() : null;
+
+        leftShooter = new ShooterVelocityController(leftShooterMotor, voltageSensor, 28, 12.6, 1.85e-04, 0.1580, lkp, lki, lkd);
+        rightShooter = new ShooterVelocityController(rightShooterMotor, voltageSensor, 28, 12.6, 1.85e-04, 0.1580, rkp, rki, rkd);
     }
 
-    public void applyPIDF() {
-        shooter.setVelocityPIDFCoefficients(kP, kI, kD, kF);}
-
-    public void update() {
-        double targetMotorRPM = TARGET_RPM / ConfigTemp.GEAR_RATIO;
-        double targetTicksPerSec = (targetMotorRPM * ConfigTemp.TICKS_PER_REV) / 60.0;
-        shooter.setVelocity(targetTicksPerSec);
-    }
-
-    public void stop() {
-        shooter.setPower(0);
-        shooter.setVelocity(0);
-    }
-
-    public double getShooterVelocity() {
-
-        double currTicksPerSec = shooter.getVelocity(); // ticks/s of motor
-        double currMotorRPM = (currTicksPerSec * 60) / ConfigTemp.TICKS_PER_REV;
-
-        return currMotorRPM;
-    }
-
-    public boolean isAtTargetThreshold() {
-        return ((getShooterVelocity() > (getTargetRPM() - ConfigTemp.THRESHOLD)) && getShooterVelocity() != 0);
+    public void shoot(String mode){
+        ShootCommand command = transfer.determineShootOrder();
+        command.shoot(mode);
     }
 }

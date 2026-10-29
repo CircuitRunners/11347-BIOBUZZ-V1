@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Config.Config;
 import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
 import org.firstinspires.ftc.teamcode.Config.Robot;
 import org.firstinspires.ftc.teamcode.Config.cDrive;
+import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -26,12 +27,10 @@ public class Transfer {
 
     NormalizedColorSensor[] colorSensors = new NormalizedColorSensor[3]; // temp: 3 - final will be 6
 
-    String[] returnList = {null, null, null};
-
     public Transfer(){
-        leftColorSensorOB = hardwareMap.get(NormalizedColorSensor.class, "left_one_bottom");
-        leftColorSensorOS = hardwareMap.get(NormalizedColorSensor.class, "left_one_side");
-        leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, "left_two");
+        leftColorSensorOB = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneBottom);
+        leftColorSensorOS = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneSide);
+        leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftTwo);
 
 
         colorSensors = new NormalizedColorSensor[]{leftColorSensorOB, leftColorSensorOS, leftColorSensorT};
@@ -53,8 +52,8 @@ public class Transfer {
 
     }
 
-    public ArrayList<ShootCommand> determineShootOrder(){
-        ArrayList<ShootCommand> order = new ArrayList<>();
+    public ShootCommand determineShootOrder(){
+        String[] returnList = {"NONE", "NONE", "NONE"};
 
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
@@ -81,6 +80,6 @@ public class Transfer {
             index ++;
         }
 
-        return order;
+        return new ShootCommand(returnList);
     }
 }

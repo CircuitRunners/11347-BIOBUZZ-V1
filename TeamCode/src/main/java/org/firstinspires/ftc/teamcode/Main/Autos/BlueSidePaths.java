@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autos;
+package org.firstinspires.ftc.teamcode.Main.Autos;
 
 import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
