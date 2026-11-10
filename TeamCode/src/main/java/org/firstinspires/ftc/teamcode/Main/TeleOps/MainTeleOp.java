@@ -36,13 +36,17 @@ public class MainTeleOp extends LinearOpMode {
         follower.setPose(new Pose(0,0,0));
 
         while (opModeIsActive()) {
-            if(gamepad1.triangleWasPressed()){flower.flowerToggle();}
+            if(ShootCommand.queueClear().getAsBoolean()){
+                if(gamepad1.triangleWasPressed()){flower.flowerToggle();}
 
-            if(gamepad1.circle){transfer.transferIntakeOn();}
-            if(gamepad1.circleWasReleased()){transfer.transferStop();}
+                if(gamepad1.right_trigger > 0.5){transfer.transferIntakeOn();}
+                if(gamepad1.rightTriggerWasReleased()){transfer.transferStop();}
+                if(gamepad1.right_bumper){transfer.transferIntakeSpit();}
+                if(gamepad1.rightBumperWasReleased()){transfer.transferStop();}
 
-            if(gamepad1.crossWasPressed()){shooter.shoot("burst");}
-            if(gamepad1.squareWasPressed()){shooter.shoot("single");}
+                if(gamepad1.crossWasPressed()){shooter.shoot("burst");}
+                if(gamepad1.squareWasPressed()){shooter.shoot("single");}
+            }
 
             drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower);
 

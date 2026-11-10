@@ -4,11 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class hardwareMappings {
     //====Color Sensors====
-    public static String colorSensorLeftOneLeft = "left_ol";
-    public static String colorSensorLeftOneRight = "left_or";
+    public static String colorSensorLeftOne = "left_o";
     public static String colorSensorLeftTwo = "left_t";
-    public static String colorSensorRightOneLeft = "right_ol";
-    public static String colorSensorRightOneRight = "right_or";
+    public static String colorSensorRightOne = "right_o";
     public static String colorSensorRightTwo = "right_t";
 
     //====Shooter Motors====
@@ -27,5 +25,13 @@ public class hardwareMappings {
 
     //====Flower====
     public static String flowerServo = "flower_servo";
+
+    //====Compression====
+    public static String leftCompression = "left_comp";
+    public static String rightCompression = "right_comp";
+
+    //====Blockers====
+    public static String blockerLeft = "blocker_left";
+    public static String blockerRight = "blocker_right";
 }
 

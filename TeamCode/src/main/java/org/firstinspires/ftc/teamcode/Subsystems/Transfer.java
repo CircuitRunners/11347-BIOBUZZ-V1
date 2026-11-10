@@ -4,46 +4,48 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 
 import android.graphics.Color;
 
-import org.firstinspires.ftc.teamcode.Config.Config;
-import org.firstinspires.ftc.teamcode.Config.ConfigTemp;
-import org.firstinspires.ftc.teamcode.Config.Robot;
-import org.firstinspires.ftc.teamcode.Config.cDrive;
+
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
+import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
+import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Transfer {
-    private NormalizedColorSensor leftColorSensorOL; //One Left
-    private NormalizedColorSensor leftColorSensorOR; //One Right
+    private NormalizedColorSensor leftColorSensorO; //One
     private NormalizedColorSensor leftColorSensorT; // Two
-    private NormalizedColorSensor rightColorSensorOL; // One Left
-    private NormalizedColorSensor getRightColorSensorOR; // One Right
-    private NormalizedColorSensor getRightColorSensorT; // Two
+    private NormalizedColorSensor rightColorSensorO; // One
+    private NormalizedColorSensor rightColorSensorT; // Two
 
     private DcMotorEx transferLeft;
     private DcMotorEx transferRight;
 
+    private Servo blockerLeft;
+    private Servo blockerRight;
+
+    private double blockerClosed = 0.0;
+    private double blockerOpen = 0.0;
+
     NormalizedColorSensor[] colorSensors;
 
     public Transfer(){
-        leftColorSensorOL = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneLeft);
-        leftColorSensorOR = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneRight);
+        leftColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOne);
         leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftTwo);
-        rightColorSensorOL = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOneLeft);
-        getRightColorSensorOR = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOneRight);
-        getRightColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightTwo);
+        rightColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOne);
+        rightColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightTwo);
 
-        colorSensors = new NormalizedColorSensor[]{leftColorSensorOL, leftColorSensorOR, leftColorSensorT, rightColorSensorOL, getRightColorSensorOR, getRightColorSensorT};
+        colorSensors = new NormalizedColorSensor[]{leftColorSensorO, leftColorSensorT, rightColorSensorO, rightColorSensorT};
 
         transferLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferLeft);
         transferRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferRight);
+
+        blockerLeft = hardwareMap.get(Servo.class, hardwareMappings.blockerLeft);
+        blockerRight = hardwareMap.get(Servo.class, hardwareMappings.blockerRight);
     }
 
     public void setTransferPower(double power) {
@@ -54,21 +56,23 @@ public class Transfer {
     public void transferIntakeOn() {
         setTransferPower(0.7);
     }
-
     public void transferTransferOn(){
         setTransferPower(0.4);
     }
-
     public void transferIntakeSpit() {
         setTransferPower(-0.4);
     }
 
+    public void blockerState(SIDE side, boolean on){
+        Servo target = side.equals(SIDE.LEFT) ? blockerLeft : blockerRight;
+        target.setPosition(on ? blockerOpen : blockerClosed);
+    }
     public void transferStop() {
         setTransferPower(0.0);
     }
 
     public ShootCommand determineShootOrder(){
-        String[] returnList = {"NONE", "NONE", "NONE", "NONE", "NONE", "NONE"};
+        GAMEPIECE[] returnList = {GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
 
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
@@ -78,18 +82,18 @@ public class Transfer {
 
             if(hsv[1] >= 50 && hsv[2] >= 50){
                 if(hsv[0] >= 40 && hsv[0] <= 60){
-                    returnList[index] = "POLLEN";
+                    returnList[index] = GAMEPIECE.POLLEN;
                 }else
                 if(hsv[0] >= 195 && hsv[0] <= 260){
-                    returnList[index] = "NECTAR";
+                    returnList[index] = GAMEPIECE.NECTAR;
                 }else
                 if(hsv[0] >= 335 || hsv[0] <= 20) {
-                    returnList[index] = "NECTAR";
+                    returnList[index] = GAMEPIECE.NECTAR;
                 }else{
-                    returnList[index] = "NONE";
+                    returnList[index] = GAMEPIECE.NONE;
                 }
             }else{
-                returnList[index] = "NONE";
+                returnList[index] = GAMEPIECE.NONE;
             }
 
             index ++;
