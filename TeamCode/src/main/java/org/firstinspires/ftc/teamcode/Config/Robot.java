@@ -30,7 +30,6 @@ public class Robot {
     public ColorSensor color;
     public List<LynxModule> hubs;
     public OpenCvWebcam transferCamera;
-    public SingleFramePipeline pipeline;
     public VoltageSensor voltageSensor;
 
     public final Servo[] servos = new Servo[7];
@@ -48,9 +47,6 @@ public class Robot {
         transferCamera = OpenCvCameraFactory.getInstance().createWebcam(
                 hardwareMap.get(WebcamName.class, "transferCamera"), cameraMonitorViewId);
 
-        // 3. Instantiate and attach your pipeline
-        pipeline = new SingleFramePipeline();
-        transferCamera.setPipeline(pipeline);
 
         // 4. Open the camera device asynchronously (Crucial for preventing crashes)
         transferCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {

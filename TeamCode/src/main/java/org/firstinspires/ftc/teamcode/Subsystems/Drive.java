@@ -1,15 +1,31 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+import com.pedropathing.follower.Follower;
+import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
+
 import org.firstinspires.ftc.teamcode.Config.Robot;
+import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 
 public class Drive {
-    private final Robot robot;
-    public Drive(Robot robot) {
-        this.robot = robot;
+    private DcMotorEx frontLeft;
+    private DcMotorEx frontRight;
+    private DcMotorEx backLeft;
+    private DcMotorEx backRight;
+    public Drive() {
+        frontLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.frontLeft);
+        frontRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.frontRight);
+        backLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.backLeft);
+        backRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.backRight);
+        frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        backLeft.setDirection(DcMotorEx.Direction.REVERSE);
     }
     private void setPowers(double frontLeftPower, double frontRightPower, double backLeftPower, double backRightPower) {
         double maxSpeed = 1.0;
-
         maxSpeed = Math.max(maxSpeed, Math.abs(frontLeftPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(frontRightPower));
         maxSpeed = Math.max(maxSpeed, Math.abs(backLeftPower));
@@ -18,16 +34,31 @@ public class Drive {
         frontRightPower /= maxSpeed;
         backLeftPower /= maxSpeed;
         backRightPower /= maxSpeed;
-        robot.frontLeft.setPower(frontLeftPower);
-        robot.frontRight.setPower(frontRightPower);
-        robot.backLeft.setPower(backLeftPower);
-        robot.backRight.setPower(backRightPower);
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
     }
-    public void drive(double forward, double right, double rotate) {
-        double frontLeftPower = forward + right + rotate;
-        double frontRightPower = forward - right - rotate;
-        double backLeftPower = forward - right + rotate;
-        double backRightPower = forward + right - rotate;
+    public void drive(double forward, double strafe, double turn) {
+
+        double frontLeftPower = (forward + strafe + turn);
+        double backLeftPower = (forward - strafe + turn);
+        double frontRightPower = (forward - strafe - turn);
+        double backRightPower = (forward + strafe - turn);
+
+        setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+    }
+
+    public void drive(double forward, double strafe, double turn, Follower follower){
+
+        double yaw = follower.localizer.pose().heading();
+        double TargetX = strafe * Math.cos(-yaw) - (-forward) * Math.sin(-yaw);
+        double TargetY = strafe * Math.sin(-yaw) + (-forward) * Math.cos(-yaw);
+
+        double frontLeftPower = (TargetY + TargetX + turn);
+        double backLeftPower = (TargetY - TargetX + turn);
+        double frontRightPower = (TargetY - TargetX - turn);
+        double backRightPower = (TargetY + TargetX - turn);
 
         setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }

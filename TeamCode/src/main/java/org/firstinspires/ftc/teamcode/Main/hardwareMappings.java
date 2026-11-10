@@ -3,11 +3,29 @@ package org.firstinspires.ftc.teamcode.Main;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class hardwareMappings {
-    public static String colorSensorLeftOneBottom = "left_ob";
-    public static String colorSensorLeftOneSide = "left_os";
+    //====Color Sensors====
+    public static String colorSensorLeftOneLeft = "left_ol";
+    public static String colorSensorLeftOneRight = "left_or";
     public static String colorSensorLeftTwo = "left_t";
+    public static String colorSensorRightOneLeft = "right_ol";
+    public static String colorSensorRightOneRight = "right_or";
+    public static String colorSensorRightTwo = "right_t";
 
+    //====Shooter Motors====
     public static String leftShooterMotor = "shooter_left";
     public static String rightShooterMotor = "shooter_right";
+
+    //====Drive Motors====
+    public static String frontLeft = "front_left";
+    public static String frontRight = "front_right";
+    public static String backLeft = "back_left";
+    public static String backRight = "back_right";
+
+    //====Transfer Motors====
+    public static String transferLeft = "transfer_left";
+    public static String transferRight = "transfer_right";
+
+    //====Flower====
+    public static String flowerServo = "flower_servo";
 }
 

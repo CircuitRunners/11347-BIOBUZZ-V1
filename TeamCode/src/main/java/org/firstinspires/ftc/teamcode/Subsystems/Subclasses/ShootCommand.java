@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.Subsystems.Subclasses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.BooleanSupplier;
 
 public class ShootCommand {
     private String[] order = new String[6];
 
     private ArrayList<String> leftOrder = new ArrayList<>();
     private ArrayList<String> rightOrder = new ArrayList<>();
-    HashMap<String, String> queue = new HashMap<>();
+    static HashMap<String, String> queue = new HashMap<>();
     public ShootCommand(String[] colorSensorValues){
         order = colorSensorValues;
     }
@@ -94,12 +95,12 @@ public class ShootCommand {
         }
     }
 
-    public void appendOrder(int delay, String functionID) {
+    public static void appendOrder(int delay, String functionID) {
         long delayInMili = (System.currentTimeMillis() + delay);
         queue.put((Math.round((Math.random()*1000000000)) + "-" + delayInMili), functionID);
     }
 
-    public void tick(){
+    public static void tick(){
         ArrayList<String> toExecute = new ArrayList<>();
         System.currentTimeMillis();
         Long systemTime = System.currentTimeMillis();
@@ -117,7 +118,11 @@ public class ShootCommand {
         }
     }
 
-    public void executeFunction(String functionID) {
+    public static BooleanSupplier queueClear(){
+        return () -> queue.isEmpty();
+    }
+
+    public static void executeFunction(String functionID) {
         switch (functionID) {
             case "leftShooter-START":
                 //Shooter RPM -> Constant Prep speed ~ avg of pollen and nectar rpm

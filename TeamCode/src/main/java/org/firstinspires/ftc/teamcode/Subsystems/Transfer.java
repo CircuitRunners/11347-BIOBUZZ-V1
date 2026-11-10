@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Config.cDrive;
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -19,41 +20,55 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Transfer {
-    private NormalizedColorSensor leftColorSensorOB; //One Bottom
-    private NormalizedColorSensor leftColorSensorOS; //One Side
+    private NormalizedColorSensor leftColorSensorOL; //One Left
+    private NormalizedColorSensor leftColorSensorOR; //One Right
     private NormalizedColorSensor leftColorSensorT; // Two
+    private NormalizedColorSensor rightColorSensorOL; // One Left
+    private NormalizedColorSensor getRightColorSensorOR; // One Right
+    private NormalizedColorSensor getRightColorSensorT; // Two
 
-    cDrive drive = new cDrive();
+    private DcMotorEx transferLeft;
+    private DcMotorEx transferRight;
 
-    NormalizedColorSensor[] colorSensors = new NormalizedColorSensor[3]; // temp: 3 - final will be 6
+    NormalizedColorSensor[] colorSensors;
 
     public Transfer(){
-        leftColorSensorOB = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneBottom);
-        leftColorSensorOS = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneSide);
+        leftColorSensorOL = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneLeft);
+        leftColorSensorOR = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOneRight);
         leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftTwo);
+        rightColorSensorOL = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOneLeft);
+        getRightColorSensorOR = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOneRight);
+        getRightColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightTwo);
 
+        colorSensors = new NormalizedColorSensor[]{leftColorSensorOL, leftColorSensorOR, leftColorSensorT, rightColorSensorOL, getRightColorSensorOR, getRightColorSensorT};
 
-        colorSensors = new NormalizedColorSensor[]{leftColorSensorOB, leftColorSensorOS, leftColorSensorT};
+        transferLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferLeft);
+        transferRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferRight);
     }
 
     public void setTransferPower(double power) {
+        transferLeft.setPower(power);
+        transferRight.setPower(power);
     }
 
-    public void transferOn() {
-
+    public void transferIntakeOn() {
+        setTransferPower(0.7);
     }
 
-    public void transferSpit() {
+    public void transferTransferOn(){
+        setTransferPower(0.4);
+    }
 
+    public void transferIntakeSpit() {
+        setTransferPower(-0.4);
     }
 
     public void transferStop() {
-
-
+        setTransferPower(0.0);
     }
 
     public ShootCommand determineShootOrder(){
-        String[] returnList = {"NONE", "NONE", "NONE"};
+        String[] returnList = {"NONE", "NONE", "NONE", "NONE", "NONE", "NONE"};
 
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){

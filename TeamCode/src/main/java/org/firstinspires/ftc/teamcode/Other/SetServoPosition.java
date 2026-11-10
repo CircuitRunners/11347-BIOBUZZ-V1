@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Configurable
 @TeleOp(name="Set Servo Position")
-public class SetServoPosition extends OpMode {
+public class        SetServoPosition extends OpMode {
     private Servo testServo;
     public static double position = 0.0;
     public static double INCREMENT = 0.001; // Amount to increment servo position

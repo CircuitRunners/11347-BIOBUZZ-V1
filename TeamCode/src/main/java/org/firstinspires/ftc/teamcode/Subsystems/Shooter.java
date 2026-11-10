@@ -39,8 +39,23 @@ public class Shooter {
         rightShooter = new ShooterVelocityController(rightShooterMotor, voltageSensor, 28, 12.6, 1.85e-04, 0.1580, rkp, rki, rkd);
     }
 
+    public void tick(){
+        leftShooter.update();
+        rightShooter.update();
+    }
+
     public void shoot(String mode){
         ShootCommand command = transfer.determineShootOrder();
+        command.calculateOrder();
         command.shoot(mode);
+    }
+
+    public void setTargetRPM(String side, double rpm) {
+        if (side.equalsIgnoreCase("left")) {
+            leftShooter.setTargetRpm(rpm);
+        }
+        if (side.equalsIgnoreCase("right")) {
+            rightShooter.setTargetRpm(rpm);
+        }
     }
 }
