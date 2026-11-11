@@ -70,7 +70,6 @@ public class Transfer {
     public void transferStop() {
         setTransferPower(0.0);
     }
-
     public ShootCommand determineShootOrder(){
         GAMEPIECE[] returnList = {GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
 

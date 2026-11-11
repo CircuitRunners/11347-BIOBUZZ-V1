@@ -44,7 +44,7 @@ public class AutoCommands {
     public Command transferOn(){
         return sequential(
                 instant(() -> {
-                    transfer.transferOn();
+                    transfer.transferIntakeOn();
                 }),
                 waitMs(200)
         );
@@ -52,7 +52,7 @@ public class AutoCommands {
     public Command transferSpit(){
         return sequential(
                 instant(() -> {
-                    transfer.transferSpit();
+                    transfer.transferIntakeSpit();
                 }),
                 waitMs(200)
         );

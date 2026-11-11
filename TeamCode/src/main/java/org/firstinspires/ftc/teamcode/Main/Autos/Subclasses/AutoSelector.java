@@ -4,10 +4,10 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ivy.Command;
-import com.pedropathing.math.Pose;
 
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoFull;
+import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPark;
+import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPartial;
 
 import java.util.HashMap;
 
@@ -37,29 +37,36 @@ public class AutoSelector {
 
     public Object[] getPath(Paths path) {
         switch (path) {
-            case FULL_AUTO:
+            case FULL_AUTO: {
                 autoFull paths = new autoFull();
-                return new Object[]{paths.start,
+                return new Object[]{
+                        paths.start,
                         sequential(
                                 follow(follower, paths.path1())
                         )
                 };
-            case PARTIAL:
+            }
+            case PARTIAL: {
                 autoPartial paths = new autoPartial();
-                return new Object[]{paths.start,
+                return new Object[]{
+                        paths.start,
                         sequential(
                                 follow(follower, paths.path1())
                         )
                 };
-            case PARK_ONLY:
+            }
+            case PARK_ONLY: {
                 autoPark paths = new autoPark();
-                return new Object[]{paths.start,
+                return new Object[]{
+                        paths.start,
                         sequential(
                                 follow(follower, paths.path1())
                         )
                 };
-            default:
+            }
+            default: {
                 return null;
+            }
         }
     }
 }
