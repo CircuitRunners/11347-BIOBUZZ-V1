@@ -10,12 +10,14 @@ import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Configurable
 public class Transfer {
     private NormalizedColorSensor leftColorSensorO; //One
     private NormalizedColorSensor leftColorSensorT; // Two
@@ -28,8 +30,12 @@ public class Transfer {
     private Servo blockerLeft;
     private Servo blockerRight;
 
-    private double blockerClosed = 0.0;
-    private double blockerOpen = 0.0;
+    public static double blockerClosed = 0.0;
+    public static double blockerOpen = 0.0;
+
+    public static double intakeSpeed = 1.0;
+    public static double transferSpeed = 0.5;
+    public static double spitSpeed = -0.5;
 
     NormalizedColorSensor[] colorSensors;
 
@@ -54,13 +60,13 @@ public class Transfer {
     }
 
     public void transferIntakeOn() {
-        setTransferPower(0.7);
+        setTransferPower(intakeSpeed);
     }
     public void transferTransferOn(){
-        setTransferPower(0.4);
+        setTransferPower(transferSpeed);
     }
     public void transferIntakeSpit() {
-        setTransferPower(-0.4);
+        setTransferPower(spitSpeed);
     }
 
     public void blockerState(SIDE side, boolean on){

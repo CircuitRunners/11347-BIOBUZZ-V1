@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Main;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class hardwareMappings {
+    //REVERSED NEEDED FOR MOTORS
     //====Color Sensors====
     public static String colorSensorLeftOne = "left_o";
     public static String colorSensorLeftTwo = "left_t";

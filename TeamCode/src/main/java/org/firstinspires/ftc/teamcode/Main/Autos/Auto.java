@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Main.Autos;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
 
+import androidx.core.math.MathUtils;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
@@ -14,7 +16,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Main.Autos.Subclasses.AutoSelector;
 import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
-import org.firstinspires.ftc.teamcode.Util.MathUtil;
 
 @Autonomous(name = "Autonomous", group = "Competition")
 public class Auto extends LinearOpMode {
@@ -43,7 +44,7 @@ public class Auto extends LinearOpMode {
             if(gamepad1.dpadRightWasPressed()){
                 index += 1;
             }
-            index = (int) MathUtil.clamp(index, 0, paths.length - 1);
+            MathUtils.clamp(index, 0, paths.length - 1);
 
             if(gamepad1.dpadUpWasPressed()){
                 startPos = (Pose) selector.getPath(paths[index])[0];
@@ -67,7 +68,9 @@ public class Auto extends LinearOpMode {
         while(opModeIsActive()){
             follower.update();
             Scheduler.execute();
+
             ShootCommand.tick();
+            selector.getShooter().tick();
         }
     }
 }

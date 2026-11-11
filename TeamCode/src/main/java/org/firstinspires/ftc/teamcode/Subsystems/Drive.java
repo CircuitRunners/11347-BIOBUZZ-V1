@@ -5,10 +5,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
-
-import org.firstinspires.ftc.teamcode.Config.Robot;
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 
 public class Drive {

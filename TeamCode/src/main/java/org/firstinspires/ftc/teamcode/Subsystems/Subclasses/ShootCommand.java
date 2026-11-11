@@ -14,8 +14,8 @@ public class ShootCommand {
     private static Transfer transfer = new Transfer();
 
     private GAMEPIECE[] order = new GAMEPIECE[4];
-    private ArrayList<GAMEPIECE> leftOrder = new ArrayList<>();
-    private ArrayList<GAMEPIECE> rightOrder = new ArrayList<>();
+    private ArrayList<String> leftOrder = new ArrayList<>();
+    private ArrayList<String> rightOrder = new ArrayList<>();
     static HashMap<String, String> queue = new HashMap<>();
     public ShootCommand(GAMEPIECE[] colorSensorValues){
         order = colorSensorValues;
@@ -78,7 +78,6 @@ public class ShootCommand {
                         delay += Double.parseDouble(order.substring(1));
                     }else{
                         appendOrder((int) delay*1000, (shooter + "-" + order));
-                        delay = 0.0;
                     }
                 }
                 index ++;
@@ -98,7 +97,7 @@ public class ShootCommand {
                         for(int i = 0; i <= orders.indexOf(orderIndex); i++){
                             orders.remove(i);
                         }
-                        orders.add(0, shooter + "-START");
+                        orders.add(0, "START");
                         break;
                     }
                 }
@@ -114,7 +113,6 @@ public class ShootCommand {
 
     public static void tick(){
         ArrayList<String> toExecute = new ArrayList<>();
-        System.currentTimeMillis();
         Long systemTime = System.currentTimeMillis();
 
         for(String i : queue.keySet()){
@@ -140,9 +138,11 @@ public class ShootCommand {
                 shooter.setTargetRPMPrimed(SIDE.LEFT);
                 break;
             case "leftShooter-POLLEN":
+                shooter.setCompression(SIDE.LEFT, GAMEPIECE.POLLEN);
                 shooter.setTargetRPM(SIDE.LEFT, GAMEPIECE.POLLEN);
                 break;
             case "leftShooter-NECTAR":
+                shooter.setCompression(SIDE.LEFT, GAMEPIECE.NECTAR);
                 shooter.setTargetRPM(SIDE.LEFT, GAMEPIECE.NECTAR);
                 break;
             case "leftShooter-ENGAGE":
@@ -163,9 +163,11 @@ public class ShootCommand {
                 shooter.setTargetRPMPrimed(SIDE.RIGHT);
                 break;
             case "rightShooter-POLLEN":
+                shooter.setTargetRPM(SIDE.RIGHT, GAMEPIECE.POLLEN);
                 shooter.setCompression(SIDE.RIGHT, GAMEPIECE.POLLEN);
                 break;
             case "rightShooter-NECTAR":
+                shooter.setTargetRPM(SIDE.RIGHT, GAMEPIECE.NECTAR);
                 shooter.setCompression(SIDE.RIGHT, GAMEPIECE.NECTAR);
                 break;
             case "rightShooter-ENGAGE":

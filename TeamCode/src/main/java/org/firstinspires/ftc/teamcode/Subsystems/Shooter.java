@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
+@Configurable
 public class Shooter {
     private DcMotorEx leftShooterMotor;
     private DcMotorEx rightShooterMotor;
@@ -25,21 +27,21 @@ public class Shooter {
 
     Transfer transfer = new Transfer();
 
-    private double lkp = 0.0;
-    private double lki = 0.0;
-    private double lkd = 0.0;
+    public static double lkp = 0.0;
+    public static double lki = 0.0;
+    public static double lkd = 0.0;
 
-    private double rkp = 0.0;
-    private double rki = 0.0;
-    private double rkd = 0.0;
+    public static double rkp = 0.0;
+    public static double rki = 0.0;
+    public static double rkd = 0.0;
 
-    private double pollenCompression = 0.0;
-    private double nectarCompression = 0.0;
+    public static double pollenCompression = 0.0;
+    public static double nectarCompression = 0.0;
 
-    private double pollenRPM = 0.0;
-    private double nectarRPM = 0.0;
-    private double primedRPM = 0.0;
-    private double defaultRPM = 0.0;
+    public static double pollenRPM = 0.0;
+    public static double nectarRPM = 0.0;
+    public static double primedRPM = 0.0;
+    public static double defaultRPM = 0.0;
     public Shooter(){
         leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
         rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
@@ -72,6 +74,10 @@ public class Shooter {
     public void setTargetRPM(SIDE side, GAMEPIECE gamepiece) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         target.setTargetRpm(gamepiece.equals(GAMEPIECE.NECTAR) ? nectarRPM : gamepiece.equals(GAMEPIECE.POLLEN) ? pollenRPM : primedRPM);
+    }
+    public void setTargetRPM(SIDE side, double rpm) {
+        ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
+        target.setTargetRpm(rpm);
     }
     public void setTargetRPMPrimed(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;

@@ -8,12 +8,14 @@ import com.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoFull;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPark;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPartial;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 
 import java.util.HashMap;
 
 public class AutoSelector {
     Follower follower;
     HashMap<Paths, String> descriptions = new HashMap<>();
+    AutoCommands commands = new AutoCommands();
     public enum Paths {
         FULL_AUTO,
         PARTIAL,
@@ -42,7 +44,9 @@ public class AutoSelector {
                 return new Object[]{
                         paths.start,
                         sequential(
-                                follow(follower, paths.path1())
+                                follow(follower, paths.path1()),
+                                commands.flowerDown(),
+                                follow(follower, paths.path2())
                         )
                 };
             }
@@ -68,5 +72,9 @@ public class AutoSelector {
                 return null;
             }
         }
+    }
+
+    public Shooter getShooter(){
+        return commands.getShooter();
     }
 }
