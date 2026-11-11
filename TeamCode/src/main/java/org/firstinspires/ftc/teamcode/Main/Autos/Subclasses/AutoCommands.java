@@ -65,4 +65,7 @@ public class AutoCommands {
                 waitMs(200)
         );
     }
+    public Shooter getShooter(){
+        return shooter;
+    };
 }
