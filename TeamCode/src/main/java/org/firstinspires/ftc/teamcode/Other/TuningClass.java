@@ -15,7 +15,7 @@ public class TuningClass extends LinearOpMode {
     public void runOpMode(){
         waitForStart();
 
-        Shooter shooter = new Shooter();
+        Shooter shooter = new Shooter(hardwareMap);
         while(opModeIsActive()){
             shooter.setTargetRPM(SIDE.LEFT, rpm);
         }

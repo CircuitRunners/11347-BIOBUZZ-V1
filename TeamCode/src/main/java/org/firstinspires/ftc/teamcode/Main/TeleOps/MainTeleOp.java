@@ -21,10 +21,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 public class MainTeleOp extends LinearOpMode {
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
-    Drive drive = new Drive();
-    Shooter shooter = new Shooter();
-    Flower flower = new Flower();
-    Transfer transfer = new Transfer();
+    Drive drive = new Drive(hardwareMap);
+    Shooter shooter = new Shooter(hardwareMap);
+    Flower flower = new Flower(hardwareMap);
+    Transfer transfer = new Transfer(hardwareMap);
     private Follower follower;
 
     @Override

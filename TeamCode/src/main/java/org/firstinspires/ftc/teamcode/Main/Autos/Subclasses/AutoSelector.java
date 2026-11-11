@@ -4,6 +4,7 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoFull;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPark;
@@ -15,18 +16,19 @@ import java.util.HashMap;
 public class AutoSelector {
     Follower follower;
     HashMap<Paths, String> descriptions = new HashMap<>();
-    AutoCommands commands = new AutoCommands();
+    AutoCommands commands;
     public enum Paths {
         FULL_AUTO,
         PARTIAL,
         PARK_ONLY
     }
 
-    public AutoSelector(Follower follower){
+    public AutoSelector(Follower follower, HardwareMap hardwareMap){
         descriptions.put(Paths.FULL_AUTO, "Full Auto");
         descriptions.put(Paths.PARTIAL, "Partial Auto");
         descriptions.put(Paths.PARK_ONLY, "Park Only");
 
+        commands = new AutoCommands(hardwareMap);
         this.follower = follower;
     }
 

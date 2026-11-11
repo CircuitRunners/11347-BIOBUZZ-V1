@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -25,7 +24,7 @@ public class Shooter {
     private Servo leftCompression;
     private Servo rightCompression;
 
-    Transfer transfer = new Transfer();
+    Transfer transfer;
 
     public static double lkp = 0.0;
     public static double lki = 0.0;
@@ -42,7 +41,8 @@ public class Shooter {
     public static double nectarRPM = 0.0;
     public static double primedRPM = 0.0;
     public static double defaultRPM = 0.0;
-    public Shooter(){
+    private static final double GEAR_RATIO = 1.5;
+    public Shooter(HardwareMap hardwareMap){
         leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
         rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
 
@@ -54,6 +54,8 @@ public class Shooter {
 
         leftCompression = hardwareMap.get(Servo.class, hardwareMappings.leftCompression);
         rightCompression = hardwareMap.get(Servo.class, hardwareMappings.rightCompression);
+
+        transfer = new Transfer(hardwareMap);
     }
 
     public void tick(){
@@ -73,18 +75,23 @@ public class Shooter {
     }
     public void setTargetRPM(SIDE side, GAMEPIECE gamepiece) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
-        target.setTargetRpm(gamepiece.equals(GAMEPIECE.NECTAR) ? nectarRPM : gamepiece.equals(GAMEPIECE.POLLEN) ? pollenRPM : primedRPM);
-    }
-    public void setTargetRPM(SIDE side, double rpm) {
-        ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
-        target.setTargetRpm(rpm);
+        double targetRPM = gamepiece.equals(GAMEPIECE.NECTAR) ? nectarRPM : gamepiece.equals(GAMEPIECE.POLLEN) ? pollenRPM : primedRPM;
+        target.setTargetRpm(targetRPM * GEAR_RATIO);
     }
     public void setTargetRPMPrimed(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
-        target.setTargetRpm(primedRPM);
+        target.setTargetRpm(primedRPM * GEAR_RATIO);
     }
     public void setTargetRPMDefault(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
-        target.setTargetRpm(defaultRPM);
+        target.setTargetRpm(defaultRPM * GEAR_RATIO);
+    }
+    public void setTargetRPM(SIDE side, double targetRPM) {
+        ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
+        target.setTargetRpm(targetRPM * GEAR_RATIO);
+    }
+    public double getCurrentRPM(SIDE side) {
+        ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
+        return target.getActualRpm() / GEAR_RATIO;
     }
 }

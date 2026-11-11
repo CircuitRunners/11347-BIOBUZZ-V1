@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Subclasses;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
@@ -10,15 +12,17 @@ import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
 public class ShootCommand {
-    private static Shooter shooter = new Shooter();
-    private static Transfer transfer = new Transfer();
+    private static Shooter shooter;
+    private static Transfer transfer;
 
     private GAMEPIECE[] order = new GAMEPIECE[4];
     private ArrayList<String> leftOrder = new ArrayList<>();
     private ArrayList<String> rightOrder = new ArrayList<>();
     static HashMap<String, String> queue = new HashMap<>();
-    public ShootCommand(GAMEPIECE[] colorSensorValues){
+    public ShootCommand(GAMEPIECE[] colorSensorValues, HardwareMap hardwareMap){
         order = colorSensorValues;
+        shooter = new Shooter(hardwareMap);
+        transfer = new Transfer(hardwareMap);
     }
     public void calculateOrder(){
         GAMEPIECE[] leftChamber = {order[0], order[1]};

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 
 public class Drive {
@@ -12,7 +12,7 @@ public class Drive {
     private DcMotorEx frontRight;
     private DcMotorEx backLeft;
     private DcMotorEx backRight;
-    public Drive() {
+    public Drive(HardwareMap hardwareMap) {
         frontLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.frontLeft);
         frontRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.frontRight);
         backLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.backLeft);

@@ -33,7 +33,7 @@ public class Auto extends LinearOpMode {
         follower = Constants.create(hardwareMap);
         follower.update();
 
-        selector = new AutoSelector(follower);
+        selector = new AutoSelector(follower, hardwareMap);
         AutoSelector.Paths[] paths = selector.getPaths();
 
         int index = 0;

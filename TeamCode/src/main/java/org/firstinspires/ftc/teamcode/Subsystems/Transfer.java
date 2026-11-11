@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import android.graphics.Color;
 
 
@@ -12,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -39,7 +38,7 @@ public class Transfer {
 
     NormalizedColorSensor[] colorSensors;
 
-    public Transfer(){
+    public Transfer(HardwareMap hardwareMap){
         leftColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOne);
         leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftTwo);
         rightColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOne);

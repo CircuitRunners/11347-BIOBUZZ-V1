@@ -6,6 +6,7 @@ import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
 import com.pedropathing.ivy.Command;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Flower;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
@@ -13,9 +14,15 @@ import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 
 public class AutoCommands {
-    Shooter shooter = new Shooter();
-    Flower flower = new Flower();
-    Transfer transfer = new Transfer();
+    Shooter shooter;
+    Flower flower;
+    Transfer transfer;
+
+    public AutoCommands(HardwareMap hardwareMap){
+        shooter = new Shooter(hardwareMap);
+        flower = new Flower(hardwareMap);
+        transfer = new Transfer(hardwareMap);
+    }
     public Command shoot(){
         return sequential(
                 instant(() -> {
