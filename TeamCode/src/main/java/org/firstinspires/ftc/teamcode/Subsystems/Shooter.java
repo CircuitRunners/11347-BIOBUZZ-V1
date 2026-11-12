@@ -31,18 +31,20 @@ public class Shooter {
     public static double lki = 0.0;
     public static double lkd = 0.001;
 
-    public static double rkp = 0.001;
+    public static double rkp = 0.5;
     public static double rki = 0.0;
-    public static double rkd = 0.5;
+    public static double rkd = 0.001;
 
-    public static double pollenCompression = 0.0;
-    public static double nectarCompression = 0.0;
+    public static double pollenCompression = 0.50;
+    public static double nectarCompression = 0.75;
 
     public static double pollenRPM = 2400.0;
     public static double nectarRPM = 2800.0;
     public static double primedRPM = 1500.0;
     public static double defaultRPM = 0.0;
     private static final double GEAR_RATIO = 1.5;
+    private double leftRPM;
+    private double rightRPM;
     public Shooter(HardwareMap hardwareMap){
         leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
         rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
@@ -73,7 +75,7 @@ public class Shooter {
 
     public void shoot(String mode){
         ShootCommand command = transfer.determineShootOrder();
-        command.calculateOrder();
+        //command.calculateOrder();
         command.shoot(mode);
     }
 
@@ -85,29 +87,66 @@ public class Shooter {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         double targetRPM = gamepiece.equals(GAMEPIECE.NECTAR) ? nectarRPM : gamepiece.equals(GAMEPIECE.POLLEN) ? pollenRPM : primedRPM;
         target.setTargetRpm(targetRPM * GEAR_RATIO);
+        if (side.equals(SIDE.LEFT)) {
+            leftRPM = targetRPM;
+        }
+        else {
+            rightRPM = targetRPM;
+        }
     }
     public void setTargetRPMPrimed(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         target.setTargetRpm(primedRPM * GEAR_RATIO);
+        if (side.equals(SIDE.LEFT)) {
+            leftRPM = primedRPM;
+        }
+        else {
+            rightRPM = primedRPM;
+        }
     }
     public void setTargetRPMDefault(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         target.setTargetRpm(defaultRPM * GEAR_RATIO);
+        if (side.equals(SIDE.LEFT)) {
+            leftRPM = defaultRPM;
+        }
+        else {
+            rightRPM = defaultRPM;
+        }
     }
-    public void setTargetRPM(SIDE side, double targetRPM) {
+    public void setAnyTargetRPM(SIDE side, double targetRPM) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         target.setTargetRpm(targetRPM * GEAR_RATIO);
+        if (side.equals(SIDE.LEFT)) {
+            leftRPM = targetRPM;
+        }
+        else {
+            rightRPM = targetRPM;
+        }
     }
     public double getCurrentRPM(SIDE side) {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         return target.getActualRpm() / GEAR_RATIO;
     }
 
-    public void setLeftGains() {
-        leftShooter.setGains(lkp, lki, lkd);
+    public double getTargetRPM(SIDE side) {
+        if (side.equals(SIDE.LEFT)) {
+            return leftRPM;
+        }
+        else {
+            return rightRPM;
+        }
     }
 
-    public void setRightGains() {rightShooter.setGains(rkp, rki, rkd);
+    public void setShooterGains(SIDE side) {
+        leftShooter.setGains(lkp, lki, lkd);
+        if (side.equals(SIDE.LEFT)) {
+            leftShooter.setGains(lkp, lki, lkd);
+        }
+        else {
+            rightShooter.setGains(rkp, rki, rkd);
+        }
     }
+
 
 }

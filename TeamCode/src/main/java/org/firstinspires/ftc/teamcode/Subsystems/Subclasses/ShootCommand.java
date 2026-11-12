@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Subclasses;
 
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
@@ -10,6 +11,8 @@ import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
+import java.util.Iterator;
+import java.util.Map;
 
 public class ShootCommand {
     private static Shooter shooter;
@@ -35,22 +38,22 @@ public class ShootCommand {
             ArrayList<String> order = orders[i];
             if (!(index[0].equals(GAMEPIECE.NONE))) {
                 order.add("START");
-                order.add("d0.8");
+                order.add("d2.8");
                 order.add(index[0].name());
-                order.add("d0.2");
+                order.add("d1.2");
                 order.add("ENGAGE");
                 if (!(index[1].equals(index[0]))) {
                     if (!(index[1].equals(GAMEPIECE.NONE))) {
-                        order.add("d0.2");
+                        order.add("d1.2");
                         order.add("DISENGAGE");
-                        order.add("d0.2");
+                        order.add("d1.2");
                         order.add(index[1].name());
-                        order.add("d0.8");
+                        order.add("d1.8");
                         order.add("ENGAGE");
-                        order.add("d0.2");
+                        order.add("d1.2");
                         order.add("STOP");
                     } else {
-                        order.add("d0.2");
+                        order.add("d1.2");
                         order.add("STOP");
                     }
                 } else {
@@ -81,7 +84,7 @@ public class ShootCommand {
                     if(order.substring(0, 1).equals("d")){
                         delay += Double.parseDouble(order.substring(1));
                     }else{
-                        appendOrder((int) delay*1000, (shooter + "-" + order));
+                        appendOrder((int) (delay*1000), (shooter + "-" + order));
                     }
                 }
                 index ++;
@@ -96,7 +99,7 @@ public class ShootCommand {
                     if(order.substring(0, 1).equals("d")){
                         delay += Double.parseDouble(order.substring(1));
                     }else{
-                        appendOrder((int) delay*1000, (shooter + "-" + order));
+                        appendOrder((int) (delay*1000), (shooter + "-" + order));
                         appendOrder((int) (delay + 0.4)*1000, (shooter + "-STOP"));
                         for(int i = 0; i <= orders.indexOf(orderIndex); i++){
                             orders.remove(i);
@@ -115,19 +118,44 @@ public class ShootCommand {
         queue.put((Math.round((Math.random()*1000000000)) + "~" + delayInMili), functionID);
     }
 
-    public static void tick(){
+//    public static void tick(){
+//        ArrayList<String> toExecute = new ArrayList<>();
+//        Long systemTime = System.currentTimeMillis();
+//
+//        for(String i : queue.keySet()){
+//            if(Long.parseLong(i.split("~")[1]) <= systemTime){
+//                toExecute.add(queue.get(i));
+//            }
+//        }
+//
+//        for(String i : queue.keySet()){if(Long.parseLong(i.split("~")[1]) <= systemTime) queue.remove(i);}
+//
+//        for(String functionID : toExecute){
+//            executeFunction(functionID);
+//        }
+//    }
+    //Hi! So I ai this bc idk what is going on here and its giving me an error.
+    public static void tick(TelemetryManager telemetryM) {
         ArrayList<String> toExecute = new ArrayList<>();
         Long systemTime = System.currentTimeMillis();
 
-        for(String i : queue.keySet()){
-            if(Long.parseLong(i.split("~")[1]) <= systemTime){
-                toExecute.add(queue.get(i));
+        telemetryM.addData("Queue Size", queue.size());
+
+        Iterator<Map.Entry<String, String>> iterator = queue.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> entry = iterator.next();
+
+            String[] keyParts = entry.getKey().split("~");
+
+            if (Long.parseLong(keyParts[1]) <= systemTime) {
+                toExecute.add(entry.getValue());
+                iterator.remove();
             }
         }
 
-        for(String i : queue.keySet()){if(Long.parseLong(i.split("~")[1]) <= systemTime) queue.remove(i);}
-
-        for(String functionID : toExecute){
+        for (String functionID : toExecute) {
+            telemetryM.addData("Executing Command", functionID);
             executeFunction(functionID);
         }
     }

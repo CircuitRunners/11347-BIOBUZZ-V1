@@ -68,6 +68,13 @@ public class ShooterVelocityController {
     public void setTargetRpm(double rpm) { targetRpm = Math.max(0.0, rpm); }
 
     public double update() {
+        if (targetRpm <= 0) {
+            iTerm = 0;
+            dActualFilt = 0;
+            leader.setPower(0);
+            return 0;
+        }
+
         double now = timer.seconds();
         double dt = now - lastTimeS;
         lastTimeS = now;

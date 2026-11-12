@@ -33,20 +33,23 @@ public class TuningClass extends LinearOpMode {
 
 
         while(opModeIsActive()){
-            shooter.setTargetRPM(SIDE.LEFT, leftRPM);
-            shooter.setTargetRPM(SIDE.RIGHT, rightRPM);
+            shooter.setAnyTargetRPM(SIDE.LEFT, leftRPM);
+            shooter.setAnyTargetRPM(SIDE.RIGHT, rightRPM);
 
             if (gamepad1.left_bumper){transfer.transferStop();}
             if(gamepad1.right_bumper){transfer.transferTransferOn();}
 
-            shooter.setLeftGains();
-            shooter.setRightGains();
+            shooter.setShooterGains(SIDE.LEFT);
+            shooter.setShooterGains(SIDE.RIGHT);
+
+            shooter.setCompression(SIDE.LEFT, GAMEPIECE.POLLEN);
+            shooter.setCompression(SIDE.RIGHT, GAMEPIECE.NECTAR);
             shooter.tick();
 
             transfer.determineShootOrder();
             GAMEPIECE[] returnList = transfer.getShootOrder();
 
-            transfer.updateColorTelemetry(telemetry);
+            //transfer.updateColorTelemetry(telemetry);
 
             telemetryM.addData("Left Sensor 1", returnList[0]);
             telemetryM.addData("Left Sensor 2", returnList[1]);
@@ -55,10 +58,10 @@ public class TuningClass extends LinearOpMode {
             telemetryM.addData("Right Sensor 2", returnList[3]);
             telemetryM.addLine("---------------------");
             telemetryM.addLine("---------------------");
-            telemetryM.addData("Left Target RPM", leftRPM);
+            telemetryM.addData("Left Target RPM", shooter.getTargetRPM(SIDE.LEFT));
             telemetryM.addData("Left Current RPM", shooter.getCurrentRPM(SIDE.LEFT));
             telemetryM.addLine("---------------------");
-            telemetryM.addData("Right Target RPM", rightRPM);
+            telemetryM.addData("Right Target RPM", shooter.getTargetRPM(SIDE.RIGHT));
             telemetryM.addData("Right Current RPM", shooter.getCurrentRPM(SIDE.RIGHT));
             telemetryM.update(telemetry);
         }

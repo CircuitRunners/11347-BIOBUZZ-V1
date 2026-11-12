@@ -32,14 +32,14 @@ public class Transfer {
     private Servo blockerLeft;
     private Servo blockerRight;
 
-    public static double blockerClosed = 0.0;
-    public static double blockerOpen = 0.0;
+    public static double blockerClosed = 0.5;
+    public static double blockerOpen = 0.5;
 
     public static double intakeSpeed = 1.0;
     public static double transferSpeed = 0.5;
     public static double spitSpeed = -0.5;
     private HardwareMap hardwareMap;
-    private GAMEPIECE[] returnList;
+    private GAMEPIECE[] returnList = new GAMEPIECE[]{GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};;
 
     NormalizedColorSensor[] colorSensors;
 
@@ -55,7 +55,7 @@ public class Transfer {
         transferLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferLeft);
         transferRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferRight);
 
-        transferLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //transferLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         blockerLeft = hardwareMap.get(Servo.class, hardwareMappings.blockerLeft);
         blockerRight = hardwareMap.get(Servo.class, hardwareMappings.blockerRight);
@@ -84,22 +84,21 @@ public class Transfer {
         setTransferPower(0.0);
     }
     public ShootCommand determineShootOrder(){
-        returnList = new GAMEPIECE[]{GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
-
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
+            i.setGain(15);
             NormalizedRGBA color = i.getNormalizedColors();
             float[] hsv = new float[3];
             Color.RGBToHSV((int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255), hsv);
 
-            if(hsv[1] >= 0.2 && hsv[2] >= 0.2){
-                if(hsv[0] >= 90 && hsv[0] <= 100){
+            if(hsv[1] >= 0.2){
+                if(hsv[0] >= 85 && hsv[0] <= 98){
                     returnList[index] = GAMEPIECE.POLLEN;
                 }else
-                if(hsv[0] >= 195 && hsv[0] <= 260){
+                if(hsv[0] >= 20 && hsv[0] <= 30){
                     returnList[index] = GAMEPIECE.NECTAR;
                 }else
-                if(hsv[0] >= 335 || hsv[0] <= 20) {
+                if(hsv[0] >= 210 && hsv[0] <= 230) {
                     returnList[index] = GAMEPIECE.NECTAR;
                 }else{
                     returnList[index] = GAMEPIECE.NONE;
@@ -114,35 +113,37 @@ public class Transfer {
         return new ShootCommand(returnList, hardwareMap);
     }
 
-    public void updateColorTelemetry(@UnknownNullability Telemetry telemetry) {
-
-        telemetry.addLine("========== COLOR SENSORS ==========");
-
-        for (int index = 0; index < colorSensors.length; index++) {
-
-            NormalizedRGBA color = colorSensors[index].getNormalizedColors();
-
-            float[] hsv = new float[3];
-
-            Color.RGBToHSV(
-                    (int)(color.red * 255),
-                    (int)(color.green * 255),
-                    (int)(color.blue * 255),
-                    hsv
-            );
-
-            telemetry.addData("Sensor " + index + " Red", color.red);
-            telemetry.addData("Sensor " + index + " Green", color.green);
-            telemetry.addData("Sensor " + index + " Blue", color.blue);
-
-            telemetry.addData("Sensor " + index + " Hue", hsv[0]);
-            telemetry.addData("Sensor " + index + " Saturation", hsv[1]);
-            telemetry.addData("Sensor " + index + " Value", hsv[2]);
-
-            telemetry.addData("Sensor " + index + " Detection",
-                    returnList == null ? "Not scanned" : returnList[index]);
-        }
-    }
+    // yea yea ik this is AI -> womp womp
+//    public void updateColorTelemetry(@UnknownNullability Telemetry telemetry) {
+//
+//        telemetry.addLine("========== COLOR SENSORS ==========");
+//
+//        for (int index = 0; index < colorSensors.length; index++) {
+//
+//            NormalizedRGBA color = colorSensors[index].getNormalizedColors();
+//            colorSensors[index].setGain(15);
+//
+//            float[] hsv = new float[3];
+//
+//            Color.RGBToHSV(
+//                    (int)(color.red * 255),
+//                    (int)(color.green * 255),
+//                    (int)(color.blue * 255),
+//                    hsv
+//            );
+//
+//            telemetry.addData("Sensor " + index + " Red", color.red);
+//            telemetry.addData("Sensor " + index + " Green", color.green);
+//            telemetry.addData("Sensor " + index + " Blue", color.blue);
+//
+//            telemetry.addData("Sensor " + index + " Hue", hsv[0]);
+//            telemetry.addData("Sensor " + index + " Saturation", hsv[1]);
+//            telemetry.addData("Sensor " + index + " Value", hsv[2]);
+//
+//            telemetry.addData("Sensor " + index + " Detection",
+//                    returnList == null ? "Not scanned" : returnList[index]);
+//        }
+//    }
     public GAMEPIECE[] getShootOrder() {
         return returnList;
     }
