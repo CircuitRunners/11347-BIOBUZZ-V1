@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -26,31 +27,38 @@ public class Shooter {
 
     Transfer transfer;
 
-    public static double lkp = 0.0;
+    public static double lkp = 0.5;
     public static double lki = 0.0;
-    public static double lkd = 0.0;
+    public static double lkd = 0.001;
 
-    public static double rkp = 0.0;
+    public static double rkp = 0.001;
     public static double rki = 0.0;
-    public static double rkd = 0.0;
+    public static double rkd = 0.5;
 
     public static double pollenCompression = 0.0;
     public static double nectarCompression = 0.0;
 
-    public static double pollenRPM = 0.0;
-    public static double nectarRPM = 0.0;
-    public static double primedRPM = 0.0;
+    public static double pollenRPM = 2400.0;
+    public static double nectarRPM = 2800.0;
+    public static double primedRPM = 1500.0;
     public static double defaultRPM = 0.0;
     private static final double GEAR_RATIO = 1.5;
     public Shooter(HardwareMap hardwareMap){
         leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
         rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
+        rightShooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().hasNext()
                 ? hardwareMap.voltageSensor.iterator().next() : null;
 
         leftShooter = new ShooterVelocityController(leftShooterMotor, voltageSensor, 28, 12.6, 1.85e-04, 0.1580, lkp, lki, lkd);
         rightShooter = new ShooterVelocityController(rightShooterMotor, voltageSensor, 28, 12.6, 1.85e-04, 0.1580, rkp, rki, rkd);
+
+        leftShooter.setGains(lkp, lki, lkd);
+        rightShooter.setGains(rkp, rki, rkd);
+
+        leftShooter.start();
+        rightShooter.start();
 
         leftCompression = hardwareMap.get(Servo.class, hardwareMappings.leftCompression);
         rightCompression = hardwareMap.get(Servo.class, hardwareMappings.rightCompression);
@@ -94,4 +102,12 @@ public class Shooter {
         ShooterVelocityController target = side.equals(SIDE.LEFT) ? leftShooter : rightShooter;
         return target.getActualRpm() / GEAR_RATIO;
     }
+
+    public void setLeftGains() {
+        leftShooter.setGains(lkp, lki, lkd);
+    }
+
+    public void setRightGains() {rightShooter.setGains(rkp, rki, rkd);
+    }
+
 }

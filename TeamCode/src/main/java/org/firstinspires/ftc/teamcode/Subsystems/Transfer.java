@@ -3,13 +3,16 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import android.graphics.Color;
 
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
+import org.jetbrains.annotations.UnknownNullability;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
@@ -35,10 +38,13 @@ public class Transfer {
     public static double intakeSpeed = 1.0;
     public static double transferSpeed = 0.5;
     public static double spitSpeed = -0.5;
+    private HardwareMap hardwareMap;
+    private GAMEPIECE[] returnList;
 
     NormalizedColorSensor[] colorSensors;
 
     public Transfer(HardwareMap hardwareMap){
+        this.hardwareMap = hardwareMap;
         leftColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftOne);
         leftColorSensorT = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorLeftTwo);
         rightColorSensorO = hardwareMap.get(NormalizedColorSensor.class, hardwareMappings.colorSensorRightOne);
@@ -48,6 +54,8 @@ public class Transfer {
 
         transferLeft = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferLeft);
         transferRight = hardwareMap.get(DcMotorEx.class, hardwareMappings.transferRight);
+
+        transferLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         blockerLeft = hardwareMap.get(Servo.class, hardwareMappings.blockerLeft);
         blockerRight = hardwareMap.get(Servo.class, hardwareMappings.blockerRight);
@@ -76,7 +84,7 @@ public class Transfer {
         setTransferPower(0.0);
     }
     public ShootCommand determineShootOrder(){
-        GAMEPIECE[] returnList = {GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
+        returnList = new GAMEPIECE[]{GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
 
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
@@ -84,8 +92,8 @@ public class Transfer {
             float[] hsv = new float[3];
             Color.RGBToHSV((int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255), hsv);
 
-            if(hsv[1] >= 50 && hsv[2] >= 50){
-                if(hsv[0] >= 40 && hsv[0] <= 60){
+            if(hsv[1] >= 0.2 && hsv[2] >= 0.2){
+                if(hsv[0] >= 90 && hsv[0] <= 100){
                     returnList[index] = GAMEPIECE.POLLEN;
                 }else
                 if(hsv[0] >= 195 && hsv[0] <= 260){
@@ -103,6 +111,42 @@ public class Transfer {
             index ++;
         }
 
-        return new ShootCommand(returnList);
+        return new ShootCommand(returnList, hardwareMap);
+    }
+
+    public void updateColorTelemetry(@UnknownNullability Telemetry telemetry) {
+
+        telemetry.addLine("========== COLOR SENSORS ==========");
+
+        for (int index = 0; index < colorSensors.length; index++) {
+
+            NormalizedRGBA color = colorSensors[index].getNormalizedColors();
+
+            float[] hsv = new float[3];
+
+            Color.RGBToHSV(
+                    (int)(color.red * 255),
+                    (int)(color.green * 255),
+                    (int)(color.blue * 255),
+                    hsv
+            );
+
+            telemetry.addData("Sensor " + index + " Red", color.red);
+            telemetry.addData("Sensor " + index + " Green", color.green);
+            telemetry.addData("Sensor " + index + " Blue", color.blue);
+
+            telemetry.addData("Sensor " + index + " Hue", hsv[0]);
+            telemetry.addData("Sensor " + index + " Saturation", hsv[1]);
+            telemetry.addData("Sensor " + index + " Value", hsv[2]);
+
+            telemetry.addData("Sensor " + index + " Detection",
+                    returnList == null ? "Not scanned" : returnList[index]);
+        }
+    }
+    public GAMEPIECE[] getShootOrder() {
+        return returnList;
     }
 }
+
+
+

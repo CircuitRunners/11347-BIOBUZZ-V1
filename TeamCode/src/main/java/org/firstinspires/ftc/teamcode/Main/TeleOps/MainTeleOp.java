@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Main.TeleOps;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
 import com.pedropathing.follower.Follower;
@@ -15,25 +16,33 @@ import org.firstinspires.ftc.teamcode.Subsystems.Flower;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
 @Configurable
 @TeleOp(name = "BIOBUZZ MainTeleOp", group = "Competition")
 public class MainTeleOp extends LinearOpMode {
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
-    Drive drive = new Drive(hardwareMap);
-    Shooter shooter = new Shooter(hardwareMap);
-    Flower flower = new Flower(hardwareMap);
-    Transfer transfer = new Transfer(hardwareMap);
-    private Follower follower;
+    Drive drive;
+    Shooter shooter;
+    Flower flower;
+    Transfer transfer;
+    //private Follower follower;
 
     @Override
     public void runOpMode() {
+        drive = new Drive(hardwareMap);
+        shooter = new Shooter(hardwareMap);
+        flower = new Flower(hardwareMap);
+        transfer = new Transfer(hardwareMap);
 
+        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+        telemetryM.addLine("Initialized");
+        telemetryM.update(telemetry);
         waitForStart();
 
-        follower = Constants.create(hardwareMap);
-        follower.setPose(new Pose(0,0,0));
+        //follower = Constants.create(hardwareMap);
+        //follower.setPose(new Pose(0,0,0));
 
         while (opModeIsActive()) {
             if(ShootCommand.queueClear().getAsBoolean()){
@@ -48,11 +57,16 @@ public class MainTeleOp extends LinearOpMode {
                 if(gamepad1.squareWasPressed()){shooter.shoot("single");}
             }
 
-            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower);
+            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);//, follower);
 
             shooter.tick();
             ShootCommand.tick();
-            follower.update();
+            //follower.update();
+
+            telemetryM.addData("shooter vel LEFT:", shooter.getCurrentRPM(SIDE.LEFT));
+            telemetryM.addData("shooter vel RIGHT: ", shooter.getCurrentRPM(SIDE.RIGHT));
+            telemetryM.update(telemetry);
+
         }
     }
 }
