@@ -64,7 +64,7 @@ public class MainTeleOp extends LinearOpMode {
             transfer.determineShootOrder();
 
             shooter.tick();
-            ShootCommand.tick(telemetryM);
+            ShootCommand.tick();
             //follower.update();
 
             GAMEPIECE[] returnList = transfer.getShootOrder();

@@ -36,6 +36,11 @@ public class ShootCommand {
         for(int i = 0; i < chambers.length; i++){
             GAMEPIECE[] index = chambers[i];
             ArrayList<String> order = orders[i];
+
+            if(index[0].equals(GAMEPIECE.NONE) && !index[1].equals(GAMEPIECE.NONE)){
+                index = new GAMEPIECE[]{index[1], GAMEPIECE.NONE};
+            }
+
             if (!(index[0].equals(GAMEPIECE.NONE))) {
                 order.add("START");
                 order.add("d2.8");
@@ -118,44 +123,20 @@ public class ShootCommand {
         queue.put((Math.round((Math.random()*1000000000)) + "~" + delayInMili), functionID);
     }
 
-//    public static void tick(){
-//        ArrayList<String> toExecute = new ArrayList<>();
-//        Long systemTime = System.currentTimeMillis();
-//
-//        for(String i : queue.keySet()){
-//            if(Long.parseLong(i.split("~")[1]) <= systemTime){
-//                toExecute.add(queue.get(i));
-//            }
-//        }
-//
-//        for(String i : queue.keySet()){if(Long.parseLong(i.split("~")[1]) <= systemTime) queue.remove(i);}
-//
-//        for(String functionID : toExecute){
-//            executeFunction(functionID);
-//        }
-//    }
-    //Hi! So I ai this bc idk what is going on here and its giving me an error.
-    public static void tick(TelemetryManager telemetryM) {
+    public static void tick(){
         ArrayList<String> toExecute = new ArrayList<>();
-        Long systemTime = System.currentTimeMillis();
+        long systemTime = System.currentTimeMillis();
 
-        telemetryM.addData("Queue Size", queue.size());
-
-        Iterator<Map.Entry<String, String>> iterator = queue.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<String, String> entry = iterator.next();
-
-            String[] keyParts = entry.getKey().split("~");
-
-            if (Long.parseLong(keyParts[1]) <= systemTime) {
+        Iterator<Map.Entry<String, String>> it = queue.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry<String, String> entry = it.next();
+            if(Long.parseLong(entry.getKey().split("~")[1]) <= systemTime){
                 toExecute.add(entry.getValue());
-                iterator.remove();
+                it.remove();
             }
         }
 
-        for (String functionID : toExecute) {
-            telemetryM.addData("Executing Command", functionID);
+        for(String functionID : toExecute){
             executeFunction(functionID);
         }
     }
