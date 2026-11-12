@@ -83,7 +83,7 @@ public class Transfer {
     public void transferStop() {
         setTransferPower(0.0);
     }
-    public ShootCommand determineShootOrder(){
+    public ShootCommand determineShootOrder(Shooter shooter, Transfer transfer){
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
             i.setGain(15);
@@ -110,7 +110,7 @@ public class Transfer {
             index ++;
         }
 
-        return new ShootCommand(returnList, hardwareMap);
+        return new ShootCommand(returnList, shooter, this);
     }
 
     // yea yea ik this is AI -> womp womp

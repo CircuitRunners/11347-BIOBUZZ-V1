@@ -74,7 +74,7 @@ public class Shooter {
     }
 
     public void shoot(String mode){
-        ShootCommand command = transfer.determineShootOrder();
+        ShootCommand command = transfer.determineShootOrder(this, transfer);
         command.calculateOrder();
         command.shoot(mode);
     }

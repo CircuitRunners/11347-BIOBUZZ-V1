@@ -8,7 +8,9 @@ import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 import java.util.Iterator;
@@ -22,10 +24,10 @@ public class ShootCommand {
     private ArrayList<String> leftOrder = new ArrayList<>();
     private ArrayList<String> rightOrder = new ArrayList<>();
     static HashMap<String, String> queue = new HashMap<>();
-    public ShootCommand(GAMEPIECE[] colorSensorValues, HardwareMap hardwareMap){
+    public ShootCommand(GAMEPIECE[] colorSensorValues, Shooter shooter, Transfer transfer){
         order = colorSensorValues;
-        shooter = new Shooter(hardwareMap);
-        transfer = new Transfer(hardwareMap);
+        ShootCommand.shooter = shooter;
+        ShootCommand.transfer = transfer;
     }
     public void calculateOrder(){
         GAMEPIECE[] leftChamber = {order[0], order[1]};
@@ -81,9 +83,9 @@ public class ShootCommand {
 
         if(mode.equalsIgnoreCase("burst")){
             int index = 0;
-            double delay = 0.0;
             for(ArrayList orders : new ArrayList[]{leftOrder, rightOrder}){
                 String shooter = new String[]{"leftShooter", "rightShooter"}[index];
+                double delay = 0.0;
                 for(Object orderIndex: orders){
                     String order = orderIndex.toString();
                     if(order.substring(0, 1).equals("d")){
@@ -124,21 +126,24 @@ public class ShootCommand {
     }
 
     public static void tick(){
-        ArrayList<String> toExecute = new ArrayList<>();
-        long systemTime = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
+        ArrayList<Map.Entry<String, String>> due = new ArrayList<>();
 
         Iterator<Map.Entry<String, String>> it = queue.entrySet().iterator();
         while(it.hasNext()){
-            Map.Entry<String, String> entry = it.next();
-            if(Long.parseLong(entry.getKey().split("~")[1]) <= systemTime){
-                toExecute.add(entry.getValue());
+            Map.Entry<String, String> e = it.next();
+            if(timeOf(e.getKey()) <= now){
+                due.add(new AbstractMap.SimpleEntry<>(e));
                 it.remove();
             }
         }
 
-        for(String functionID : toExecute){
-            executeFunction(functionID);
-        }
+        due.sort(Comparator.comparingLong(e -> timeOf(e.getKey())));
+        for(Map.Entry<String, String> e : due) executeFunction(e.getValue());
+    }
+
+    private static long timeOf(String key){
+        return Long.parseLong(key.split("~")[1]);
     }
 
     public static BooleanSupplier queueClear(){
