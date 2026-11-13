@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
+import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.Queue;
 import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShooterVelocityController;
-import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
+
+import java.util.function.BooleanSupplier;
 
 @Configurable
 public class Shooter {
@@ -25,8 +27,8 @@ public class Shooter {
     private Servo leftCompression;
     private Servo rightCompression;
 
-    Transfer transfer;
-
+    private Transfer transfer;
+    private Queue queue;
     public static double lkp = 0.5;
     public static double lki = 0.0;
     public static double lkd = 0.001;
@@ -45,7 +47,7 @@ public class Shooter {
     private static final double GEAR_RATIO = 1.5;
     private double leftRPM;
     private double rightRPM;
-    public Shooter(HardwareMap hardwareMap){
+    public Shooter(HardwareMap hardwareMap, Transfer transfer){
         leftShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.leftShooterMotor);
         rightShooterMotor = hardwareMap.get(DcMotorEx.class, hardwareMappings.rightShooterMotor);
         rightShooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -65,18 +67,22 @@ public class Shooter {
         leftCompression = hardwareMap.get(Servo.class, hardwareMappings.leftCompression);
         rightCompression = hardwareMap.get(Servo.class, hardwareMappings.rightCompression);
 
-        transfer = new Transfer(hardwareMap);
+        this.transfer = transfer;
+        queue = new Queue(this, transfer);
     }
 
     public void tick(){
         leftShooter.update();
         rightShooter.update();
+        queue.tick();
     }
 
-    public void shoot(String mode){
-        ShootCommand command = transfer.determineShootOrder(this, transfer);
-        command.calculateOrder();
-        command.shoot(mode);
+    public BooleanSupplier queueClear(){
+        return queue.isEmpty();
+    }
+
+    public void shoot(){
+        queue.generateQueue(transfer.determineShootOrder());
     }
 
     public void setCompression(SIDE side, GAMEPIECE gamepiece){
@@ -130,12 +136,7 @@ public class Shooter {
     }
 
     public double getTargetRPM(SIDE side) {
-        if (side.equals(SIDE.LEFT)) {
-            return leftRPM;
-        }
-        else {
-            return rightRPM;
-        }
+        return side.equals(SIDE.LEFT) ? leftRPM : rightRPM;
     }
 
     public void setShooterGains(SIDE side) {

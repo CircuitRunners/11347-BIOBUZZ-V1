@@ -3,16 +3,12 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import android.graphics.Color;
 
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Main.hardwareMappings;
-import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Util.enums.GAMEPIECE;
 import org.firstinspires.ftc.teamcode.Util.enums.SIDE;
-import org.jetbrains.annotations.UnknownNullability;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
@@ -39,7 +35,6 @@ public class Transfer {
     public static double transferSpeed = 0.5;
     public static double spitSpeed = -0.5;
     private HardwareMap hardwareMap;
-    private GAMEPIECE[] returnList = new GAMEPIECE[]{GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};;
 
     NormalizedColorSensor[] colorSensors;
 
@@ -83,7 +78,8 @@ public class Transfer {
     public void transferStop() {
         setTransferPower(0.0);
     }
-    public ShootCommand determineShootOrder(Shooter shooter, Transfer transfer){
+    public GAMEPIECE[] determineShootOrder(){
+        GAMEPIECE[] returnList = new GAMEPIECE[]{GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE, GAMEPIECE.NONE};
         int index = 0;
         for(NormalizedColorSensor i : colorSensors){
             i.setGain(15);
@@ -110,41 +106,6 @@ public class Transfer {
             index ++;
         }
 
-        return new ShootCommand(returnList, shooter, this);
-    }
-
-    // yea yea ik this is AI -> womp womp
-//    public void updateColorTelemetry(@UnknownNullability Telemetry telemetry) {
-//
-//        telemetry.addLine("========== COLOR SENSORS ==========");
-//
-//        for (int index = 0; index < colorSensors.length; index++) {
-//
-//            NormalizedRGBA color = colorSensors[index].getNormalizedColors();
-//            colorSensors[index].setGain(15);
-//
-//            float[] hsv = new float[3];
-//
-//            Color.RGBToHSV(
-//                    (int)(color.red * 255),
-//                    (int)(color.green * 255),
-//                    (int)(color.blue * 255),
-//                    hsv
-//            );
-//
-//            telemetry.addData("Sensor " + index + " Red", color.red);
-//            telemetry.addData("Sensor " + index + " Green", color.green);
-//            telemetry.addData("Sensor " + index + " Blue", color.blue);
-//
-//            telemetry.addData("Sensor " + index + " Hue", hsv[0]);
-//            telemetry.addData("Sensor " + index + " Saturation", hsv[1]);
-//            telemetry.addData("Sensor " + index + " Value", hsv[2]);
-//
-//            telemetry.addData("Sensor " + index + " Detection",
-//                    returnList == null ? "Not scanned" : returnList[index]);
-//        }
-//    }
-    public GAMEPIECE[] getShootOrder() {
         return returnList;
     }
 }

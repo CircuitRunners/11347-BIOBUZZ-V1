@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Main.Autos.Subclasses.AutoSelector;
 import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
-import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 
 @Autonomous(name = "Autonomous", group = "Competition")
 public class Auto extends LinearOpMode {

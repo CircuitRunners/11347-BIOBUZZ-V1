@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Flower;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.Subsystems.Subclasses.ShootCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 
 public class AutoCommands {
@@ -19,16 +18,16 @@ public class AutoCommands {
     Transfer transfer;
 
     public AutoCommands(HardwareMap hardwareMap){
-        shooter = new Shooter(hardwareMap);
         flower = new Flower(hardwareMap);
         transfer = new Transfer(hardwareMap);
+        shooter = new Shooter(hardwareMap, transfer);
     }
     public Command shoot(){
         return sequential(
                 instant(() -> {
-                    shooter.shoot("burst");
+                    shooter.shoot();
                 }),
-                waitUntil(ShootCommand.queueClear()),
+                waitUntil(shooter.queueClear()),
                 waitMs(500)
         );
     }
