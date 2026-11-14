@@ -29,7 +29,7 @@ public class Transfer {
     private Servo blockerRight;
 
     public static double blockerClosed = 0.5;
-    public static double blockerOpen = 0.2;
+    public static double blockerOpen = 0.32 ;
 
     public static double intakeSpeed = 1.0;
     public static double transferSpeed = 1.0;

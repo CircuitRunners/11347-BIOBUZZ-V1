@@ -32,6 +32,8 @@ public class MainTeleOp extends LinearOpMode {
     long lastTime = System.currentTimeMillis();
     //private Follower follower;
 
+    GAMEPIECE[] latestRead = new GAMEPIECE[4];
+
     @Override
     public void runOpMode() {
         drive = new Drive(hardwareMap);
@@ -45,10 +47,14 @@ public class MainTeleOp extends LinearOpMode {
 
         transfer.blockerState(SIDE.LEFT, false);
         transfer.blockerState(SIDE.RIGHT, false);
+        transfer.tick();
 
         hubs = hardwareMap.getAll(LynxModule.class);
 
         waitForStart();
+
+        shooter.setTargetRPMDefault(SIDE.LEFT);
+        shooter.setTargetRPMDefault(SIDE.RIGHT);
 
         while (opModeIsActive()) {
             for (LynxModule hub : hubs) {hub.clearBulkCache();}
@@ -65,7 +71,11 @@ public class MainTeleOp extends LinearOpMode {
                 if(gamepad1.leftBumperWasPressed()){shooter.shoot();}
             }
 
-            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            if(gamepad1.dpadDownWasPressed()){
+                latestRead = transfer.determineShootOrder();
+            }
+
+            drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             shooter.tick();
             transfer.tick();
@@ -80,6 +90,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetryM.addData("Loop Time", System.currentTimeMillis() - lastTime + " ms");
             telemetryM.addData("System Time", System.currentTimeMillis());
             telemetryM.addData("Queue", shooter.telemetry());
+            telemetryM.addData("Color Sensor", Arrays.toString(latestRead));
             lastTime = System.currentTimeMillis();
             telemetryM.update(telemetry);
 

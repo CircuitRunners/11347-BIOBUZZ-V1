@@ -43,7 +43,7 @@ public class Shooter {
     public static double pollenRPM = 2350.0;
     public static double nectarRPM = 2900.0;
     public static double primedRPM = 1800.0;
-    public static double defaultRPM = 1000.0;
+    public static double defaultRPM = 700.0;
     private static final double GEAR_RATIO = 1.5;
     private double leftRPM;
     private double rightRPM;

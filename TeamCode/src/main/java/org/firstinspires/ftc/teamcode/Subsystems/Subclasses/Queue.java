@@ -15,10 +15,12 @@ public class Queue {
     private ArrayList<QueueCommand> queue = new ArrayList<>();
     Shooter shooter;
     Transfer transfer;
+    CaseTable caseTable;
     double totalDelay = 0.0;
     public Queue(Shooter shooter, Transfer transfer) {
         this.shooter = shooter;
         this.transfer = transfer;
+        caseTable = new CaseTable();
     }
 
     public String telemetry(){
@@ -50,8 +52,9 @@ public class Queue {
         parseOrder(calculateOrder(colorValues));
     }
 
-    public void parseOrder(ArrayList<Object>[] orders) {
+    public void parseOrder(Object[][] orders) {
         for (int i = 0; i < orders.length; i++) {
+            if (orders[i] == null) continue;
             Double delay = 0.0;
             for (Object o : orders[i]) {
                 if (o instanceof COMMAND) {
@@ -64,59 +67,13 @@ public class Queue {
     }
 
 
-    public ArrayList<Object>[] calculateOrder(GAMEPIECE[] colorValues) {
+    public Object[][] calculateOrder(GAMEPIECE[] colorValues) {
         GAMEPIECE[][] chambers = {{colorValues[0], colorValues[1]}, {colorValues[2], colorValues[3]}};
-        ArrayList<Object>[] orders = new ArrayList[2];
+        Object[][] orders = new Object[2][2];
 
         for (int i = 0; i < chambers.length; i++) {
             GAMEPIECE[] index = chambers[i];
-            orders[i] = new ArrayList<>();
-
-            if (index[0].equals(GAMEPIECE.NONE) && !index[1].equals(GAMEPIECE.NONE)) {
-                index = new GAMEPIECE[]{index[1], GAMEPIECE.NONE};
-            }
-
-            if (!(index[0].equals(GAMEPIECE.NONE))) {
-                orders[i].add(COMMAND.START);
-                orders[i].add(1.2);
-                orders[i].add(index[1].name().equals("POLLEN") ? COMMAND.POLLEN : COMMAND.NECTAR);
-                orders[i].add(0.6);
-                orders[i].add(COMMAND.ENGAGE);
-                if (!(index[1].equals(index[0]))) {
-                    if (!(index[1].equals(GAMEPIECE.NONE))) {
-                        orders[i].add(index[1].name().equals("POLLEN") ? 0.2 : 0.25);
-                        orders[i].add(COMMAND.DISENGAGE);
-                        orders[i].add(0.3);
-                        orders[i].add(COMMAND.CAP);
-                        orders[i].add(0.3);
-                        orders[i].add(COMMAND.CAP_2);
-                        orders[i].add(0.2);
-                        orders[i].add(index[1].name().equals("POLLEN") ? COMMAND.POLLEN : COMMAND.NECTAR);
-                        orders[i].add(1.2);
-                        orders[i].add(COMMAND.ENGAGE);
-                        orders[i].add(0.4);
-                        orders[i].add(COMMAND.STOP);
-                    } else {
-                        orders[i].add(0.4);
-                        orders[i].add(COMMAND.STOP);
-                    }
-                } else {
-                    orders[i].add(index[1].name().equals("POLLEN") ? 0.2 : 0.25);
-                    orders[i].add(COMMAND.DISENGAGE);
-                    orders[i].add(0.3);
-                    orders[i].add(COMMAND.CAP);
-                    orders[i].add(0.3);
-                    orders[i].add(COMMAND.CAP_2);
-                    orders[i].add(0.2);
-                    orders[i].add(index[1].name().equals("POLLEN") ? COMMAND.POLLEN : COMMAND.NECTAR);
-                    orders[i].add(1.0);
-                    orders[i].add(COMMAND.ENGAGE);
-                    orders[i].add(0.5);
-                    orders[i].add(COMMAND.STOP);
-                }
-            } else {
-                orders[i].add(COMMAND.STOP);
-            }
+            orders[i] = caseTable.getOrder(index);
         }
         return orders;
     }
