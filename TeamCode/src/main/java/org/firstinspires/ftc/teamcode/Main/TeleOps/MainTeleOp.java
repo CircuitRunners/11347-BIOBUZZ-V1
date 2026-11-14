@@ -5,10 +5,12 @@ import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Pedropathing.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.Subsystems.Flower;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
@@ -28,6 +30,7 @@ public class MainTeleOp extends LinearOpMode {
     Shooter shooter;
     Flower flower;
     Transfer transfer;
+    Follower follower;
     List<LynxModule> hubs;
     long lastTime = System.currentTimeMillis();
     //private Follower follower;
@@ -40,6 +43,7 @@ public class MainTeleOp extends LinearOpMode {
         flower = new Flower(hardwareMap);
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap, transfer);
+        follower = Constants.create(hardwareMap);
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         telemetryM.addLine("Initialized");
@@ -75,10 +79,11 @@ public class MainTeleOp extends LinearOpMode {
                 latestRead = transfer.determineShootOrder();
             }
 
-            drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower);
 
             shooter.tick();
             transfer.tick();
+            follower.update();
 
             telemetryM.addLine("---------------------");
             telemetryM.addData("Left Target RPM", shooter.getTargetRPM(SIDE.LEFT));
