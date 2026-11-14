@@ -12,9 +12,11 @@ public class QueueCommand {
     public long systemTime;
     public COMMAND command;
     public SIDE side;
+    public int id = 0;
 
     public QueueCommand(double delay, COMMAND command, SIDE side){
-        this.systemTime = System.currentTimeMillis() + (long) delay*1000;
+        id = (int) (Math.random() * 10000);
+        this.systemTime = System.currentTimeMillis() + (long)(delay*1000);
         this.command = command;
         this.side = side;
     }

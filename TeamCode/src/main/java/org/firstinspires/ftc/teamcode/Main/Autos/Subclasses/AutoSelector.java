@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoFull;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPark;
 import org.firstinspires.ftc.teamcode.Main.Autos.paths.autoPartial;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.Subsystems.Transfer;
 
 import java.util.HashMap;
 
@@ -79,4 +80,5 @@ public class AutoSelector {
     public Shooter getShooter(){
         return commands.getShooter();
     }
+    public Transfer getTransfer(){return commands.getTransfer();}
 }

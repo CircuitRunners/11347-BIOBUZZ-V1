@@ -27,7 +27,7 @@ public class TuningClass extends LinearOpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         telemetryM.addLine("Testing");
         telemetryM.update(telemetry);
-        Shooter shooter = new Shooter(hardwareMap);
+        Shooter shooter = new Shooter(hardwareMap, null);
         Transfer transfer = new Transfer(hardwareMap);
         waitForStart();
 
@@ -47,15 +47,7 @@ public class TuningClass extends LinearOpMode {
             shooter.tick();
 
             transfer.determineShootOrder();
-            GAMEPIECE[] returnList = transfer.getShootOrder();
 
-            //transfer.updateColorTelemetry(telemetry);
-
-            telemetryM.addData("Left Sensor 1", returnList[0]);
-            telemetryM.addData("Left Sensor 2", returnList[1]);
-            telemetryM.addLine("---------------------");
-            telemetryM.addData("Right Sensor 1", returnList[2]);
-            telemetryM.addData("Right Sensor 2", returnList[3]);
             telemetryM.addLine("---------------------");
             telemetryM.addLine("---------------------");
             telemetryM.addData("Left Target RPM", shooter.getTargetRPM(SIDE.LEFT));

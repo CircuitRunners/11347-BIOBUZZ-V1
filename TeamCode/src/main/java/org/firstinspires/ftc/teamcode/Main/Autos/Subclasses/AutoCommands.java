@@ -74,4 +74,5 @@ public class AutoCommands {
     public Shooter getShooter(){
         return shooter;
     };
+    public Transfer getTransfer(){return transfer;}
 }

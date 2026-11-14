@@ -37,13 +37,13 @@ public class Shooter {
     public static double rki = 0.0;
     public static double rkd = 0.001;
 
-    public static double pollenCompression = 0.50;
-    public static double nectarCompression = 0.75;
+    public static double pollenCompression = 0.79 ;
+    public static double nectarCompression = 0.5;
 
-    public static double pollenRPM = 2400.0;
-    public static double nectarRPM = 2800.0;
-    public static double primedRPM = 1500.0;
-    public static double defaultRPM = 0.0;
+    public static double pollenRPM = 2350.0;
+    public static double nectarRPM = 2900.0;
+    public static double primedRPM = 1800.0;
+    public static double defaultRPM = 1000.0;
     private static final double GEAR_RATIO = 1.5;
     private double leftRPM;
     private double rightRPM;
@@ -149,5 +149,8 @@ public class Shooter {
         }
     }
 
+    public String telemetry(){
+        return queue.telemetry();
+    }
 
 }

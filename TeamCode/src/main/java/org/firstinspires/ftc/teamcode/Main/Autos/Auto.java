@@ -68,7 +68,8 @@ public class Auto extends LinearOpMode {
             follower.update();
             Scheduler.execute();
 
-            //ShootCommand.tick(telemetryM);
+
+            selector.getTransfer().tick();
             selector.getShooter().tick();
         }
     }
